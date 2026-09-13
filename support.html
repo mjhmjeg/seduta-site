@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Seduta Support</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<h1>Support</h1><svg class="wave" viewBox="0 0 130 12" aria-hidden="true"><path d="M2 8 C 20 3, 40 10, 60 6 S 100 3, 128 7" fill="none" stroke="#E16259" stroke-width="2.5" stroke-linecap="round"/></svg>
+<p>Questions and problems: <a href="mailto:seduta@spert.ai">seduta@spert.ai</a>. The answers below cover what most people ask.</p>
+<nav><a href="/">Seduta</a><a href="/privacy.html">Privacy</a><a href="/support.html">Support</a></nav>
+<h2>Getting started</h2>
+<div class="card"><p><strong>The first transcription needs the speech model.</strong> Seduta downloads it once (about 470 MB). On the iPhone it waits for Wi-Fi unless you allow cellular downloads in Settings. Until then the home screen shows a Download button.</p></div>
+<div class="card"><p><strong>Recording a call on the Mac.</strong> Leave “Ask to record calls” on. When Zoom, Teams, Meet or another app opens the microphone, a notification offers to record. Or press Start Recording yourself. Keep Seduta open at login (Settings › General) so it is there when the call starts.</p></div>
+<div class="card"><p><strong>Recording a call on the iPhone.</strong> iOS gives phone calls exclusive use of the microphone, so Seduta records in-person meetings. Record a call in the Phone app; when it ends, share the recording from Notes to Seduta and it becomes a meeting.</p></div>
+<h2>Summaries</h2>
+<ul>
+<li><strong>“Turn on Apple Intelligence”</strong>: on-device summaries need Apple Intelligence on, in System Settings on a Mac with Apple silicon or an iPhone 15 Pro or later with iOS 26. Otherwise use an endpoint.</li>
+<li><strong>“The endpoint refused the API key”</strong>: check the key in Settings › Summaries. EUrouter keys start with a dashboard at eurouter.ai; the Settings screen shows what a key has spent.</li>
+<li><strong>Your own server</strong>: any OpenAI-compatible endpoint works, including Ollama on your Mac at <code>http://localhost:11434/v1</code>. Lower “Words per request” for small models.</li>
+</ul>
+<h2>Speakers and names</h2>
+<ul>
+<li>Your own voice is “Me”. Other people start as “Speaker 1, 2, …”. Tap a name in the transcript to rename it; Seduta remembers the voice for next time.</li>
+<li>Names and terms the transcriber gets wrong go in the names-and-terms file (Settings › Storage). Names from calendar invites are added by themselves.</li>
+</ul>
+<h2>Files</h2>
+<p>Every meeting is a folder in <em>iCloud Drive › Seduta</em>: <code>meta.json</code>, <code>transcript.md</code>, <code>summary.md</code>, and the recording until it is removed. Deleted recordings sit in “Recently Deleted” for a few days. You can open, copy or delete anything there; Seduta only reads what it finds.</p>
+<p class="quiet">Seduta 1.0. Spert AI, Netherlands.</p>
+</main></body></html>

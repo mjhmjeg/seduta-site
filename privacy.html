@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Seduta Privacy</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<h1>Privacy</h1><svg class="wave" viewBox="0 0 130 12" aria-hidden="true"><path d="M2 8 C 20 3, 40 10, 60 6 S 100 3, 128 7" fill="none" stroke="#E16259" stroke-width="2.5" stroke-linecap="round"/></svg>
+<p>Seduta has no account and no server that sees your meetings. This page lists every place data goes, so you can check the claim rather than take it.</p>
+<nav><a href="/">Seduta</a><a href="/privacy.html">Privacy</a><a href="/support.html">Support</a></nav>
+<h2>On your devices</h2>
+<p>Recordings, transcripts, summaries, meeting details from your calendar (title, participants, notes), the voice prints Seduta learns to recognise people, and your names-and-terms list are files in <em>iCloud Drive › Seduta</em>. iCloud Drive is Apple's service under your Apple Account; it is encrypted by Apple, and end-to-end encrypted when you turn on Advanced Data Protection. Settings sync through iCloud, and an API key you enter is kept in the Keychain and travels with iCloud Keychain.</p>
+<p>Transcription and speaker separation run entirely on the device. Audio never leaves it for that.</p>
+<h2>What leaves the device, and when</h2>
+<table><thead><tr><th>What</th><th>To whom</th><th>When</th></tr></thead><tbody>
+<tr><td>The transcript of a meeting</td><td>The summary endpoint you set in Settings (EUrouter by default, or any OpenAI-compatible endpoint, or a server of your own)</td><td>Only when summaries are written by an endpoint. With "This Mac / This iPhone" the transcript stays on the device.</td></tr>
+<tr><td>The speech and speaker models (about 500 MB)</td><td>Hugging Face, where the models are published</td><td>Downloaded once, the first time.</td></tr>
+<tr><td>An anonymous device id and call counts</td><td>Desert Ant Labs, the makers of the Voz speech model</td><td>After each transcription, by their SDK. Never audio, never text. Their licence counts free devices this way.</td></tr>
+</tbody></table>
+<p>Seduta itself sends nothing else: no analytics, no crash reports, no telemetry. Apple may collect crash reports if you allowed that in your device settings.</p>
+<h2>Recordings and consent</h2>
+<p>Recording is your call. Seduta reminds you next to every record control to let everyone know they are being recorded, and posts a notification on your Mac when a recording starts. Whether recording a conversation is lawful where you are is your responsibility.</p>
+<h2>Retention</h2>
+<p>By default the recording moves to “Recently Deleted” inside the Seduta folder 48 hours after it is transcribed, and is erased 72 hours after that. Both windows are settings; 0 keeps recordings. Transcripts and summaries stay until you delete the meeting.</p>
+<h2>Permissions</h2>
+<ul>
+<li><strong>Microphone:</strong> to record. Asked the first time you start a recording.</li>
+<li><strong>System audio (Mac):</strong> to record the other side of a call.</li>
+<li><strong>Calendar:</strong> to name meetings, list participants and remind you before a call. Asked from the Upcoming section, and optional.</li>
+<li><strong>Notifications (Mac):</strong> to offer to record a call and to tell you when a summary is ready.</li>
+</ul>
+<h2>Contact</h2>
+<p>Spert AI, Netherlands. <a href="mailto:seduta@spert.ai">seduta@spert.ai</a></p>
+<p class="quiet">Last updated 13 September 2026.</p>
+</main></body></html>

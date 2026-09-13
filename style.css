@@ -1,0 +1,16 @@
+/* Seduta's pages: the app's own look, nothing else. */
+:root { --page:#FFFFFF; --panel:#F7F6F3; --ink:#37352F; --ink2:#787774; --ink3:#9B9A97; --hair:#EDECE8; --border:#E6E4DF; --accent:#E16259 }
+@media (prefers-color-scheme: dark) { :root { --page:#191919; --panel:#252524; --ink:#E6E4DF; --ink2:#A8A6A1; --ink3:#82817C; --hair:#302F2D; --border:#3A3936; --accent:#E8675E } }
+body { margin:0; background:var(--page); color:var(--ink); font:15px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased }
+main { max-width:68ch; margin:0 auto; padding:48px 24px 80px }
+h1 { font-size:40px; font-weight:700; letter-spacing:-0.02em; line-height:1.1; margin:0 }
+h2 { font-size:13px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink3); margin:36px 0 10px }
+p, li { margin:0 0 12px }
+ul { padding-left:22px } li { margin-bottom:6px } li::marker { color:var(--ink3) }
+a { color:var(--ink) } .quiet { color:var(--ink3); font-size:13px }
+.wave { display:block; width:130px; height:12px; margin:6px 0 24px -2px }
+nav { display:flex; gap:16px; font-size:13px; padding:12px 0; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); margin:28px 0 }
+nav a { color:var(--ink2); text-decoration:none } nav a:hover { color:var(--ink); text-decoration:underline }
+.card { background:var(--panel); border-radius:6px; padding:14px 16px; margin:0 0 16px }
+table { border-collapse:collapse; width:100%; font-size:13.5px } th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; color:var(--ink3); padding:6px 10px 6px 0; border-bottom:1px solid var(--border) } td { padding:8px 10px 8px 0; border-bottom:1px solid var(--hair); vertical-align:top }
+code { font:12.5px "SF Mono", Menlo, monospace; background:var(--panel); padding:1px 5px; border-radius:3px }

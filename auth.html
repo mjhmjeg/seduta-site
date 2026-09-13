@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seduta</title>
+<!--
+  EUrouter only redirects to https, so its consent page lands here and this page hands the code to the app.
+  Nothing secret passes through: the code is single use, expires in ten minutes, and is worthless without the
+  PKCE verifier, which never leaves the app. Deploy as a static page at the URL set in Connect.callback.
+-->
+<style>
+  body { font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; color: #37352f;
+         background: #fff; margin: 0; display: grid; place-items: center; height: 100vh; text-align: center }
+  .card { padding: 32px }
+  a { color: #37352f }
+  .hint { color: #9b9a97; font-size: 13px; margin-top: 8px }
+  @media (prefers-color-scheme: dark) { body { background: #191919; color: #e6e4df } a { color: #e6e4df } }
+</style>
+</head>
+<body>
+  <div class="card">
+    <p id="message">Opening Seduta…</p>
+    <p><a id="open" href="#" hidden>Open Seduta</a></p>
+    <p class="hint" id="hint"></p>
+  </div>
+<script>
+  const code = new URLSearchParams(location.search).get("code")
+  const message = document.getElementById("message")
+  const open = document.getElementById("open")
+  const hint = document.getElementById("hint")
+  if (code) {
+    const target = "seduta://auth?code=" + encodeURIComponent(code)
+    open.href = target
+    open.hidden = false
+    hint.textContent = "You can close this tab once Seduta has the key."
+    location.replace(target)
+  } else {
+    message.textContent = "That link is missing its code."
+    hint.textContent = "Go back to Seduta and try connecting again."
+  }
+</script>
+</body>
+</html>
