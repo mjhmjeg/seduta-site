@@ -1,7 +1,7 @@
 # Seduta's pages
 
 `seduta.spert.ai`: the home page, the privacy policy and the support page App Store Connect asks for, and `auth.html`,
-the EUrouter connect bounce (a copy of `server/auth/index.html`; `Connect.callback` points at `https://seduta.spert.ai/auth.html`
+the EUrouter connect bounce (a copy of `server/auth/index.html`; `Connect.callback` points at `https://seduta.spert.ai/auth`
 once this is live).
 
 Static files, no build step. Deployed to Cloudflare Pages (project `seduta-site`, account mj@spert.ai), live at
