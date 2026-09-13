@@ -4,12 +4,10 @@
 the EUrouter connect bounce (a copy of `server/auth/index.html`; `Connect.callback` points at `https://seduta.spert.ai/auth.html`
 once this is live).
 
-Static files, no build step. Deploy to deploybase (EU) with its MCP server, which needs an API key only Martijn has:
+Static files, no build step. Deployed to Cloudflare Pages (project `seduta-site`, account mj@spert.ai), live at
+https://seduta-site.pages.dev and seduta.spert.ai (CNAME to `seduta-site.pages.dev`). To publish a change:
 
-1. In the deploybase dashboard create an API key (`dbk_…`).
-2. Add the server to Claude Code with `claude mcp add deploybase -e DEPLOYBASE_API_KEY=dbk_… -e DEPLOYBASE_API_URL=https://api.deploybase.eu -- deploybase-mcp --transport stdio`
-   (install `deploybase-mcp` first as their docs say: https://docs.deploybase.eu/mcp/).
-3. Then in a session: `create_project` (static, root `server/site`), `trigger_deployment`, `add_domain` for `seduta.spert.ai`,
-   and set the DNS record `get_dns_instructions` returns.
+    npx wrangler pages deploy server/site --project-name seduta-site --branch main --commit-dirty=true
 
-Cloudflare Pages works the same way if deploybase is not ready: dashboard › Workers & Pages › Upload assets, drag this folder.
+The folder is also mirrored to https://github.com/mjhmjeg/seduta-site (public, only these files), remote `site`:
+`git subtree push --prefix=server/site site main`. Nothing reads from it yet.
