@@ -71,16 +71,21 @@ function initSlots() {
 
 /* ---------- pricing ---------- */
 function initPricing() {
-  // CHF is the base price; Apple sets every other storefront (docs/decisions.md, 30 Sep), so no converted numbers here.
-  let yearly = false;
-  const m = (n) => 'CHF ' + n;
+  // Apple's own price for the visitor's storefront (/api/price, by the country Cloudflare sees; table built by
+  // scripts/site_prices.py from App Store Connect). CHF 30/5/35 is the base and the fallback, never a converted number.
+  const lang = navigator.language || 'en';
+  let yearly = false, p = ['CHF', '30', '5', '35'], cc = 'CH';
+  const m = (n) => { n = Number(n); try { return new Intl.NumberFormat(lang, { style: 'currency', currency: p[0], minimumFractionDigits: 0, maximumFractionDigits: Number.isInteger(n) ? 0 : 2 }).format(n); } catch (_) { return p[0] + ' ' + n; } };
   const draw = () => {
-    $$('[data-p]').forEach((e) => { const k = e.dataset.p; e.textContent = m(k === 'free' ? 0 : k === 'byok' ? 30 : yearly ? 35 : 5); });
+    $$('[data-p]').forEach((e) => { const k = e.dataset.p; e.textContent = m(k === 'free' ? 0 : k === 'byok' ? p[1] : yearly ? p[3] : p[2]); });
     $('#per').textContent = yearly ? 'a year' : 'a month';
     $$('#per-seg button').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.y === '1') === yearly)));
+    let name = cc; try { name = new Intl.DisplayNames(['en'], { type: 'region' }).of(cc); } catch (_) {}
+    $('#price-note').textContent = 'App Store prices for ' + name + '. Other countries see their own price in the App Store.';
   };
   $('#per-seg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { yearly = b.dataset.y === '1'; draw(); } });
   draw();
+  fetch('/api/price').then((r) => r.json()).then((j) => { if (j && j.price) { p = j.price; cc = j.country; draw(); } }).catch(() => {});
 }
 
 /* ---------- terminal in "Under the hood" ---------- */

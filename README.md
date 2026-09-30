@@ -90,3 +90,9 @@ Delete one address: `npx wrangler kv key delete "email:<address>" --namespace-id
 - The key list is read whole on every call. Fine for hundreds of subscribers; ask EUrouter for a name filter past that.
 - Refunds come late: credits already spent are gone. The monthly cap bounds that to one month per subscriber.
 - Sandbox keys spend real credits, hence the 1.00 cap.
+
+## Prices (`functions/api/price.js`, `prices.json`)
+
+`GET /api/price` answers Apple's prices for the visitor's App Store country (`request.cf.country`, nothing stored),
+Switzerland when unknown. `prices.json` is generated, never edited: export the three products' prices from App Store
+Connect into `docs/prices/`, then `python3 scripts/site_prices.py` from the repository root.
