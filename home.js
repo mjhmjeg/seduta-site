@@ -12,6 +12,7 @@ const NOTE = { idle: 'One email when Seduta is on the App Store. Nothing else.',
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const TICK = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#37352F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.6 L9.6 17.4 L19.8 6.4"/></svg>';
 // ponytail: stand-in badge. Replace with Apple's official "Download on the App Store" SVG (Apple's marketing guidelines) before launch.
+const ENDS = 'Your next meeting can be real: recorded on your own device, with no bot in the call. ' + (APP_STORE_URL ? 'Free to download.' : 'Join the waitlist and be first in line when Seduta is on the App Store.');
 const badge = (cls) => `<a class="badge${cls ? ' ' + cls : ''}" href="${APP_STORE_URL}"><span>Download on the</span><span>App Store</span></a>`;
 
 function wlHTML(v) {
@@ -115,7 +116,7 @@ const mk = () => TPL.content.firstElementChild.cloneNode(true);
 const BOX = 'M4.5 4.6 L19.4 4.5 L19.5 19.4 L4.6 19.5 Z', BOXT = BOX + ' M8 12.3 L11 15.4 L19.8 4.8';
 const CLK = ['14:29', '14:30', '14:31', '15:02', '15:03', '15:03', '15:04'];
 const LABELS = ['Seduta at rest', 'A call starts', 'Recording', 'Menu bar', 'Notes ready', 'Transcript', 'Your summary'];
-const CAPS = ['Seduta sits quietly in your menu bar and knows your calendar.', 'It notices the call and asks. No bot joins.', 'Recording both sides of the call. The red dot shows it, the whole time.', 'Everything is one click from the menu bar.', 'When the call ends, your Mac writes it down. On the device.', 'Every word, with who said it.', 'Change the template, edit it, tick things off. It’s your file.'];
+const CAPS = ['Seduta sits quietly in your menu bar and knows your calendar.', 'It notices the call and asks. No bot joins. Go ahead, press Record: this is a demo, nothing gets recorded.', 'Recording both sides of the call. The red dot shows it, the whole time.', 'Everything is one click from the menu bar.', 'When the call ends, your Mac writes it down. On the device.', 'Every word, with who said it.', 'Change the template, edit it, tick things off. It’s your file.'];
 const SPEAKER = (step, sub) => step === 2 ? 's' : step === 3 ? ['s', 'j', 'a', 'm', 's'][Math.max(0, sub - 1)] : step === 4 ? 'm' : '';
 const fmt = (s) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 
@@ -270,7 +271,7 @@ function initPhone() {
     box.appendChild(el); cards.push(el);
   });
   const end = document.createElement('div'); end.className = 'pcard';
-  end.innerHTML = '<div class="pend"><div class="endlogo"></div><div class="endt">That’s Seduta.</div><div class="wl-slot" data-v="end"></div><button class="replay" type="button">↺ Replay</button></div><div class="pnum"><span style="color:var(--ink2)">That’s the whole flow. Nothing was recorded.</span></div>';
+  end.innerHTML = '<div class="pend"><div class="endlogo"></div><div class="endt">That’s Seduta.</div><p class="ends"></p><div class="wl-slot" data-v="end"></div><button class="replay" type="button">↺ Replay</button></div><div class="pnum"><span style="color:var(--ink2)">That’s the whole flow. Nothing was recorded.</span></div>';
   const lg = $('.brand .logo').cloneNode(true); lg.setAttribute('width', 44); lg.setAttribute('height', 44); $('.endlogo', end).replaceWith(lg);
   box.appendChild(end); cards.push(end);
 
@@ -298,4 +299,5 @@ initSlots();
 initPricing();
 initTerm();
 initDemo();
+document.querySelectorAll('.ends').forEach((e) => { e.textContent = ENDS; });
 })();
