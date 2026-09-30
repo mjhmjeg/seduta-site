@@ -22,3 +22,4 @@
 .vs .more{margin-top:16px;font-size:14px;line-height:1.8;color:var(--ink2)}.vs .more a{color:var(--ink2);white-space:nowrap}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (max-width:699px){.vs{padding-top:40px}.vs .two{grid-template-columns:1fr;gap:32px}.vs .cta{flex-direction:column;align-items:flex-start}.vs th,.vs td{padding:12px 8px}.vs table{font-size:14px}}
+.vs tr.grp th{padding:28px 12px 8px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);border-bottom-color:var(--line)}
