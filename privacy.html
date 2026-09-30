@@ -10,6 +10,8 @@
 <h2>What leaves the device, and when</h2>
 <table><thead><tr><th>What</th><th>To whom</th><th>When</th></tr></thead><tbody>
 <tr><td>The transcript of a meeting, with its title, date, your typed notes, and the participants' names and the companies their e-mail domains name (never the addresses themselves)</td><td>The summary endpoint you set in Settings (EUrouter by default, or any OpenAI-compatible endpoint, or a server of your own)</td><td>Only when summaries are written by an endpoint. With "This Mac / This iPhone" the transcript stays on the device.</td></tr>
+<tr><td>The same, with Seduta Plus</td><td>EUrouter, through a key we create for your subscription; EUrouter runs the models on servers in the EU</td><td>Only while Seduta Plus writes your summaries. We never see the transcript: it goes from your device to EUrouter directly.</td></tr>
+<tr><td>Your App Store purchase receipt for Seduta Plus (signed by Apple: product, dates, an anonymous transaction number; no name, e-mail or payment details)</td><td>Our endpoint at seduta.spert.ai, which checks it with Apple's signature and asks EUrouter for your key</td><td>Once when you subscribe or restore. We keep no database; the key is named after the transaction number, and is deleted when the subscription ends or is refunded.</td></tr>
 <tr><td>The speech and speaker models (about 500 MB)</td><td>Hugging Face, where the models are published</td><td>Downloaded once, the first time.</td></tr>
 <tr><td>The Swiss German model (about 1.5 GB), Mac only and optional</td><td>Hugging Face, where we publish it</td><td>Downloaded once, when you download it in Settings › Transcription or a meeting marked Swiss German is first transcribed.</td></tr>
 <tr><td>Meeting notes: title, date, participants, what you typed, the summary, and the transcript when asked</td><td>An app you pair in Settings › AI agents on your Mac, such as Claude. That app handles the notes under its own privacy terms; for Claude, Anthropic processes what it reads.</td><td>Only after you pair the app, and only when it asks. Never audio, voice prints or calendar invites. Remove the app in Settings to stop it.</td></tr>
@@ -29,5 +31,5 @@
 </ul>
 <h2>Contact</h2>
 <p>Spert, Switzerland. <a href="mailto:seduta@spert.ai">seduta@spert.ai</a></p>
-<p class="quiet">Last updated 16 September 2026.</p>
+<p class="quiet">Last updated 30 September 2026.</p>
 </main></body></html>
