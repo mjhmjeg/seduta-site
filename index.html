@@ -1,18 +1,380 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Seduta</title><link rel="stylesheet" href="style.css"></head>
-<body><main>
-<h1>Seduta</h1><svg class="wave" viewBox="0 0 130 12" aria-hidden="true"><path d="M2 8 C 20 3, 40 10, 60 6 S 100 3, 128 7" fill="none" stroke="#E16259" stroke-width="2.5" stroke-linecap="round"/></svg>
-<p>A meeting recorder that keeps everything on your devices. It records calls and in-person meetings, transcribes them on the device, tells speakers apart, remembers voices, and writes a summary. Every meeting is a folder of Markdown and JSON in your own iCloud Drive. No account, no server of ours.</p>
-<nav><a href="/">Seduta</a><a href="/privacy">Privacy</a><a href="/support">Support</a></nav>
-<h2>What it does</h2>
-<ul>
-<li><strong>Mac:</strong> notices when a call app opens the microphone and offers to record; records your side and the call's audio; a menu bar icon shows the state.</li>
-<li><strong>iPhone and iPad:</strong> records in-person meetings, with a Live Activity on the lock screen. Phone calls are recorded in the Phone app and shared to Seduta.</li>
-<li><strong>Apple Watch:</strong> records the quick conversation you are in, and stops or pauses a recording the phone is making.</li>
-<li><strong>Transcription</strong> runs on the device with Voz, a European speech model covering 25 European languages, mixed within one meeting if that is how you talk.</li>
-<li><strong>Summaries</strong> are written on the device with Apple Intelligence, or by an endpoint you choose, EUrouter by default.</li>
-</ul>
-<h2>Where things go</h2>
-<p>Recordings, transcripts and summaries live in <em>iCloud Drive › Seduta</em>, shared by your Mac, iPhone and iPad. The recording is removed a while after the transcript exists, and you can bring it back for a few days. See the <a href="/privacy">privacy page</a> for exactly what leaves the device and when.</p>
-<p class="quiet">Seduta is Sursilvan Romansh for meeting. Made by Spert, Switzerland.</p>
-</main></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seduta · Meeting notes without a bot in the call</title>
+<meta name="description" content="Seduta records your calls and meetings on your Mac, transcribes them on the device and writes the notes: what was decided, who does what. No bot joins the call. Everything stays in your own iCloud Drive.">
+<link rel="canonical" href="https://seduta.spert.ai/">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Seduta">
+<meta property="og:title" content="Seduta · Meeting notes without a bot in the call">
+<meta property="og:description" content="Your meetings, written down. Without a bot in the call. Transcribed on your Mac, stored in your own iCloud Drive.">
+<meta property="og:url" content="https://seduta.spert.ai/">
+<meta property="og:image" content="https://seduta.spert.ai/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Seduta: Your meetings, written down. Without a bot in the call. A Mac with a Record this meeting notification.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Seduta · Meeting notes without a bot in the call">
+<meta name="twitter:description" content="Your meetings, written down. Without a bot in the call.">
+<meta name="twitter:image" content="https://seduta.spert.ai/assets/og.png">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="/home.css">
+</head>
+<body>
+
+<div class="hdr-w"><header class="hdr">
+  <a class="brand" href="/" aria-label="Seduta home"><svg class="logo" width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.4 C16.9 3.3 20.7 7.1 20.6 12 C20.6 16.8 16.8 20.6 12 20.6 C7.2 20.7 3.3 16.9 3.4 12.1 C3.3 7.2 7.1 3.4 12 3.4 Z" stroke="#37352F" stroke-width="1.8" stroke-linecap="round"/><circle class="dot" cx="12" cy="12" r="3.4" fill="#E16259"/><g class="bars"><rect class="bar a" x="8.6" y="7.5" width="2.6" height="9" rx="1.3" fill="#E16259"/><rect class="bar b" x="12.8" y="7.5" width="2.6" height="9" rx="1.3" fill="#E16259"/></g></svg><span>Seduta</span></a>
+  <nav class="nav" aria-label="Main"><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="/privacy">Privacy</a><a href="/support">Support</a></nav>
+  <div class="hdr-cta" id="hdr-cta"><a class="btn-join" href="#join" data-join>Join the waitlist</a></div>
+</header></div>
+
+<main>
+<section class="hero" id="top">
+  <h1>Your meetings, written down. Without a bot in the call.</h1>
+  <p class="lede">Seduta records your calls and meetings on your Mac, transcribes them on the device, and writes the notes: what was decided, who does what. Everything stays in your own iCloud Drive.</p>
+  <div class="wl-slot" id="join" data-v="hero"></div>
+  <noscript><p class="wl-note">The waitlist needs JavaScript. Or write to <a href="mailto:seduta@spert.ai">seduta@spert.ai</a>.</p></noscript>
+  <div class="hero-still" aria-hidden="true">
+    <div class="bar0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2" fill="#E16259" stroke="none"/></svg>14:30</div>
+    <div class="nt2"><b>Zoom call detected: Spring campaign review</b><div class="q">Record this meeting?</div><div class="bb"><i>Record</i><i>Not this one</i></div><div class="consent">Recording is your call: let everyone know they are being recorded.</div></div>
+  </div>
+</section>
+
+<!-- Guided demo, desktop: a drawn Mac inside a 1216px bezel, scaled down to fit narrower windows -->
+<section class="demo" id="demo" data-step="1" data-sub="0" data-prog="0" data-tpl="Standard" data-picker="0" data-speak="" aria-label="Guided demo of Seduta on a Mac">
+  <div class="demo-w">
+    <div class="ctl">
+      <span class="cap" id="cap" aria-live="polite"></span>
+      <div class="cbtns">
+        <button class="ibtn" data-act="play" id="btn-play" type="button" aria-label="Pause autoplay" title="Pause autoplay">
+          <svg class="i-pause" width="16" height="16" viewBox="0 0 24 24" fill="#37352F" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>
+          <svg class="i-play" width="16" height="16" viewBox="0 0 24 24" fill="#37352F" aria-hidden="true"><path d="M7.5 4.8 C7.5 4 8.3 3.6 9 4 L19 11.2 C19.6 11.6 19.6 12.4 19 12.8 L9 20 C8.3 20.4 7.5 20 7.5 19.2 Z"/></svg>
+        </button>
+        <button class="ibtn" data-act="prev" id="btn-prev" type="button" aria-label="Previous step" title="Previous step"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#37352F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5.5 L8.5 12 L15 18.5"/></svg></button>
+        <button class="ibtn dark" data-act="next" id="btn-next" type="button" aria-label="Next step" title="Next step"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5.5 L15.5 12 L9 18.5"/></svg><svg class="hint h-next" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6.5 C 18 3.5, 34 8.5, 52 5.5 S 84 3.5, 98 6"/></svg></button>
+      </div>
+    </div>
+    <nav class="rail" id="rail" aria-label="Demo steps"></nav>
+    <div class="bz" id="bz">
+      <div class="bezel">
+        <div id="macslot"></div>
+        <div class="endc" role="group" aria-label="End of the demo">
+          <div class="endi">
+            <svg class="logo" width="44" height="44" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.4 C16.9 3.3 20.7 7.1 20.6 12 C20.6 16.8 16.8 20.6 12 20.6 C7.2 20.7 3.3 16.9 3.4 12.1 C3.3 7.2 7.1 3.4 12 3.4 Z" stroke="#37352F" stroke-width="1.8" stroke-linecap="round"/><circle class="dot" cx="12" cy="12" r="3.4" fill="#E16259"/><g class="bars"><rect class="bar a" x="8.6" y="7.5" width="2.6" height="9" rx="1.3" fill="#E16259"/><rect class="bar b" x="12.8" y="7.5" width="2.6" height="9" rx="1.3" fill="#E16259"/></g></svg>
+            <div class="endt">That’s Seduta.</div>
+            <div class="wl-slot" data-v="end"></div>
+            <button class="replay" data-act="replay" type="button">↺ Replay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Guided demo, phone: swipeable cards, filled by home.js from the same drawn Mac -->
+<section class="phone" id="phone" aria-labelledby="ph-h">
+  <div class="hd"><h2 id="ph-h">See a meeting go by.</h2><p>Swipe through a real Seduta flow. Nothing is recorded.</p></div>
+  <div class="pcards" id="pcards" role="group" aria-roledescription="carousel" aria-label="Demo, 8 cards" tabindex="0"></div>
+  <div class="pnav">
+    <div class="dots" id="dots"></div>
+    <div class="pbtns">
+      <button type="button" id="pc-prev" aria-label="Previous card"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#37352F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5.5 L8.5 12 L15 18.5"/></svg></button>
+      <button type="button" id="pc-next" aria-label="Next card"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5.5 L15.5 12 L9 18.5"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<section class="sec how" id="how"><div class="in">
+  <div class="kick">HOW IT WORKS</div>
+  <div class="cols">
+    <div class="col"><svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5 C3.4 6.6 4 6 4.9 6 L13.6 6.1 C14.5 6.1 15 6.7 15 7.5 L15 16.4 C15 17.3 14.4 17.9 13.5 17.9 L4.9 18 C4 18 3.5 17.4 3.5 16.5 Z M15 10.5 L20.4 7.4 L20.5 16.6 L15 13.5"/></svg><h3>It notices the call.</h3><p>Seduta sees Zoom, Teams or Meet open the microphone and asks if it should record.</p></div>
+    <div class="col"><svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5 M8.3 8.6 L15.4 8.5 M8.3 11.5 L12.8 11.4"/></svg><h3>Your Mac writes it down.</h3><p>Transcribed on the device, speakers told apart, voices remembered.</p></div>
+    <div class="col"><svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5 L8.6 4.9 L8.5 9 L4.4 9.1 Z M11.2 7 L19.8 6.9 M4.5 14 L8.6 13.9 L8.5 18 L4.4 18.1 Z M11.2 16 L17.6 15.9 M5.3 16.1 L6.4 17.2 L8.9 13.8"/></svg><h3>You get the notes.</h3><p>Summary, decisions and action items, ready when the call ends. Tick them off, edit, or pick another template.</p></div>
+  </div>
+</div></section>
+
+<section class="devs"><div class="in">
+  <div class="top"><h2>Also on iPhone, iPad and Apple Watch.</h2><p>All devices share one Seduta folder. Record on the one you have with you, read the notes on any of them.</p></div>
+  <div class="stage">
+    <figure class="dev ipad"><div class="fr"><img src="assets/ipad-summary.webp" width="356" height="475" loading="lazy" alt="Seduta on iPad: the meeting list beside the summary of Spring campaign review"></div><figcaption><b>iPad.</b> Your meetings and the notes side by side, in split view.</figcaption></figure>
+    <figure class="dev iph"><div class="fr"><img src="assets/iphone-home.webp" width="194" height="440" loading="lazy" alt="Seduta on iPhone: status card, upcoming and recorded meetings"></div><figcaption><b>iPhone.</b> For meetings in person. Phone calls: record in the Phone app, then share to Seduta.</figcaption></figure>
+    <figure class="dev iph lock"><div class="fr"><div class="scr" role="img" aria-label="iPhone lock screen with the Seduta Live Activity: recording, 12:38">
+      <div class="d">Wednesday 30 September</div><div class="tm">12:42</div>
+      <div class="la"><div class="r"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="#fff" stroke-width="1.6"/><rect x="8.6" y="8" width="2.6" height="8" rx="1.3" fill="#E16259"/><rect x="12.8" y="9.5" width="2.6" height="5" rx="1.3" fill="#E16259"/></svg><div class="m"><b>Lunch with Tom</b><span>Seduta · In person</span></div><div class="t">12:38</div></div><div class="bt"><span>Pause</span><span>Stop</span></div></div>
+    </div></div><figcaption><b>Lock screen.</b> A Live Activity shows the recording, with Pause and Stop.</figcaption></figure>
+    <figure class="dev wat"><div class="fr"><img src="assets/watch-recording.webp" width="128" height="153" loading="lazy" alt="Seduta on Apple Watch: recording, 12:38, with Pause and Stop"></div><figcaption><b>Watch.</b> Record the conversation you’re in, or pause the phone from your wrist.</figcaption></figure>
+  </div>
+  <p class="dev-p">iPhone for meetings in person, with a Live Activity on the lock screen, and phone calls shared from the Phone app. iPad in split view. On the Watch, record the conversation you’re in or pause the phone from your wrist. All devices share one Seduta folder.</p>
+</div></section>
+
+<section class="sec"><div class="in priv">
+  <div class="l">
+    <h2>Your meetings are yours. Literally files.</h2>
+    <svg class="wv" width="220" height="12" viewBox="0 0 220 12" aria-hidden="true"><path d="M2 8 C 40 4, 80 10, 120 6 S 190 3, 218 7"/></svg>
+    <a class="go" href="/privacy">Read exactly what goes where →</a>
+  </div>
+  <div class="rs">
+    <div class="pt"><svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5"/></svg><div><h3>Transcribed on your device.</h3><p>On your Mac, iPhone or iPad. The audio never leaves it for that.</p></div></div>
+    <div class="pt"><svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7 C3.5 6 4.1 5.5 5 5.5 L9.5 5.5 L11.5 7.5 L19 7.5 C19.9 7.5 20.5 8.1 20.5 9 L20.5 17.5 C20.5 18.4 19.9 19 19 19 L5 19 C4.1 19 3.5 18.4 3.5 17.5 Z"/></svg><div><h3>Stored in your iCloud Drive.</h3><p>Every meeting is a folder you can open, back up or delete. No account.</p></div></div>
+    <div class="pt"><svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12 L9.5 12 C12 12 12.3 6.5 15 6.5 L20.5 6.5 M9.5 12 C12 12 12.3 17.5 15 17.5 L20.5 17.5 M9.5 12 L20.5 12"/></svg><div><h3>You choose where summaries are written.</h3><p>On the device, on European servers with Plus, or with your own key.</p></div></div>
+  </div>
+</div></section>
+
+<section class="sec price" id="pricing"><div class="in">
+  <div class="ph-row">
+    <h2>Pricing</h2>
+    <div class="seg" role="group" aria-label="Currency" id="cur"><button type="button" data-c="EUR" aria-pressed="false">EUR</button><button type="button" data-c="CHF" aria-pressed="false">CHF</button><button type="button" data-c="USD" aria-pressed="false">USD</button></div>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <div class="rowp"><div class="hd"><h3>Free</h3></div><div class="amt"><b data-p="free">€0</b></div></div>
+      <div class="d m">Record, transcribe and summarize on your device. Unlimited.</div>
+      <hr>
+      <ul><li>Everything on every device</li><li>On-device summaries with Apple Intelligence</li><li>Notes while you record</li><li>Search</li></ul>
+    </article>
+    <article class="card rec">
+      <div class="rowp"><div class="hd"><h3>Seduta Plus</h3><span class="dk-only">Recommended</span><span class="ph-only">Recommended · 1 week free</span></div><div class="amt"><b data-p="plus">€5</b><span id="per">a month</span></div></div>
+      <div class="tg"><div class="seg sm" role="group" aria-label="Billing period" id="per-seg"><button type="button" data-y="0" aria-pressed="true">Monthly</button><button type="button" data-y="1" aria-pressed="false">Yearly</button></div><span class="dk-only">1 week free</span></div>
+      <div class="d dk-only">Summaries on European servers. Nothing to set up.</div>
+      <div class="d ph-only">Summaries on European servers. Nothing to set up. Includes the live transcript and the wrap-up. A fair use policy applies.</div>
+      <hr>
+      <ul><li>Everything in Free</li><li>Summaries by European models, no key needed</li><li>The live transcript during the call</li><li>The wrap-up five minutes before the meeting ends (Mac)</li><li>A fair use policy applies</li></ul>
+    </article>
+    <article class="card">
+      <div class="rowp"><div class="hd"><h3>Seduta BYOK</h3></div><div class="amt"><b data-p="byok">€30</b><span>once</span></div></div>
+      <div class="d m dk-only">For people who bring their own AI.</div>
+      <div class="d ph-only">For people who bring their own AI. Your own key, the live transcript, the wrap-up.</div>
+      <hr>
+      <ul><li>Everything in Free</li><li>Your own summary key: EUrouter, OpenAI-compatible or your own server</li><li>The live transcript during the call</li><li>The wrap-up five minutes before the meeting ends (Mac)</li></ul>
+    </article>
+  </div>
+  <p class="fine">Prices in the App Store may differ by country. Bought and managed through your Apple Account.</p>
+</div></section>
+
+<section class="hood"><div class="in">
+  <h2>Under the hood.</h2>
+  <div class="g">
+    <div><h3>Where your summary is written.</h3><p>European models first, because meetings are among the most private things a company has.</p></div>
+    <div>
+      <div class="route">
+        <div class="tnode"><svg class="o" viewBox="0 0 220 70" preserveAspectRatio="none" fill="none" aria-hidden="true"><path d="M8 5 C 60 2, 150 4, 212 6 C 217 20, 216 48, 213 63 C 150 67, 70 66, 7 64 C 3 48, 4 22, 8 5 Z" stroke="#C9C7C0" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg><svg class="ic" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5 M8.3 8.6 L15.4 8.5 M8.3 11.5 L12.8 11.4"/></svg><span>Transcript on your Mac</span></div>
+        <svg class="arrows" width="150" height="372" viewBox="0 0 150 372" aria-hidden="true"><path d="M3 186 C 30 183, 44 150, 58 112 C 72 74, 96 63, 140 62" stroke="#E16259" stroke-width="1.8" stroke-opacity=".45"/><path class="f" d="M3 186 C 30 183, 44 150, 58 112 C 72 74, 96 63, 140 62" stroke="#E16259" stroke-width="2" style="animation-duration:1.60s"/><path d="M131 55 C 135 58, 139 60, 142 62 C 138 64, 135 67, 132 70" stroke="#E16259" stroke-width="1.8"/><path d="M3 186 C 40 189, 70 183, 100 187 C 115 188, 128 186, 140 186" stroke="#C9C7C0" stroke-width="1.8" stroke-opacity=".45"/><path class="f" d="M3 186 C 40 189, 70 183, 100 187 C 115 188, 128 186, 140 186" stroke="#C9C7C0" stroke-width="2" style="animation-duration:1.85s"/><path d="M131 179 C 135 182, 139 184, 142 186 C 138 188, 135 191, 132 194" stroke="#C9C7C0" stroke-width="1.8"/><path d="M3 186 C 30 190, 46 222, 60 262 C 74 298, 98 309, 140 310" stroke="#C9C7C0" stroke-width="1.8" stroke-opacity=".45"/><path class="f" d="M3 186 C 30 190, 46 222, 60 262 C 74 298, 98 309, 140 310" stroke="#C9C7C0" stroke-width="2" style="animation-duration:2.10s"/><path d="M131 303 C 135 306, 139 308, 142 310 C 138 312, 135 315, 132 318" stroke="#C9C7C0" stroke-width="1.8"/></svg>
+        <div class="rts">
+          <div class="rt"><div class="n"><span><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5"/><path d="M12 7.2 C12.3 9.2 13 9.9 15 10.2 C13 10.5 12.3 11.2 12 13.2 C11.7 11.2 11 10.5 9 10.2 C11 9.9 11.7 9.2 12 7.2 Z" stroke="#E16259"/></svg></span>On the device</div><div class="x">Apple Intelligence. Free, nothing leaves.</div></div>
+          <div class="rt"><div class="n"><span><svg width="30" height="20" viewBox="0 0 30 20" role="img" aria-label="EU flag" style="flex:none;border-radius:2px"><rect width="30" height="20" fill="#2B4DA0"/><circle cx="15.00" cy="4.00" r="0.95" fill="#FFCC00"/><circle cx="18.00" cy="4.80" r="0.95" fill="#FFCC00"/><circle cx="20.20" cy="7.00" r="0.95" fill="#FFCC00"/><circle cx="21.00" cy="10.00" r="0.95" fill="#FFCC00"/><circle cx="20.20" cy="13.00" r="0.95" fill="#FFCC00"/><circle cx="18.00" cy="15.20" r="0.95" fill="#FFCC00"/><circle cx="15.00" cy="16.00" r="0.95" fill="#FFCC00"/><circle cx="12.00" cy="15.20" r="0.95" fill="#FFCC00"/><circle cx="9.80" cy="13.00" r="0.95" fill="#FFCC00"/><circle cx="9.00" cy="10.00" r="0.95" fill="#FFCC00"/><circle cx="9.80" cy="7.00" r="0.95" fill="#FFCC00"/><circle cx="12.00" cy="4.80" r="0.95" fill="#FFCC00"/></svg></span>Seduta Plus</div><div class="x">European models on EU servers through EUrouter. The transcript goes from your device to EUrouter directly; we never see it.</div></div>
+          <div class="rt"><div class="n"><span><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 10.6 C 10.9 10.5 12.6 12.3 12.5 14.6 C 12.4 16.9 10.6 18.6 8.4 18.5 C 6.1 18.5 4.4 16.7 4.5 14.4 C 4.6 12.2 6.3 10.6 8.5 10.6 Z M11.4 11.6 L18.8 4.4 M16.2 7 L18.3 9.1 M18.4 4.9 L20.2 6.7"/></svg></span>Your own key</div><div class="x">EUrouter (Mistral Large 3 by default), any OpenAI-compatible endpoint, or your own server.</div></div>
+        </div>
+      </div>
+      <div class="route-ph">
+        <div class="tnode"><svg class="o" viewBox="0 0 220 60" preserveAspectRatio="none" fill="none" aria-hidden="true"><path d="M7 5 C 60 2, 150 4, 213 6 C 217 20, 216 42, 213 55 C 150 58, 70 57, 6 55 C 3 42, 4 20, 7 5 Z" stroke="#C9C7C0" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg><svg class="ic" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5"/></svg>Transcript on your Mac</div>
+        <div class="rph"><svg class="arrows" width="42" height="297" viewBox="0 0 42 297" aria-hidden="true"><path d="M16 0 C 14.5 16, 17.5 31, 16 33 C 15.5 42, 20 45, 27 44.5 L 38 45" stroke="#E16259" stroke-width="1.6" stroke-opacity=".45"/><path class="f" d="M16 0 C 14.5 16, 17.5 31, 16 33 C 15.5 42, 20 45, 27 44.5 L 38 45" stroke="#E16259" stroke-width="1.8" style="animation-duration:1.6s;stroke-dasharray:8 10"/><path d="M32 40 C 34 42, 36 44, 39 45 C 36 46, 34 48, 32.5 50.5" stroke="#E16259" stroke-width="1.6"/><path d="M16 0 C 14.5 55, 17.5 109, 16 144 C 15.5 153, 20 156, 27 155.5 L 38 156" stroke="#C9C7C0" stroke-width="1.6" stroke-opacity=".45"/><path class="f" d="M16 0 C 14.5 55, 17.5 109, 16 144 C 15.5 153, 20 156, 27 155.5 L 38 156" stroke="#C9C7C0" stroke-width="1.8" style="animation-duration:1.9s;stroke-dasharray:8 10"/><path d="M32 151 C 34 153, 36 155, 39 156 C 36 157, 34 159, 32.5 161.5" stroke="#C9C7C0" stroke-width="1.6"/><path d="M16 0 C 14.5 101, 17.5 202, 16 277 C 15.5 286, 20 289, 27 288.5 L 38 289" stroke="#C9C7C0" stroke-width="1.6" stroke-opacity=".45"/><path class="f" d="M16 0 C 14.5 101, 17.5 202, 16 277 C 15.5 286, 20 289, 27 288.5 L 38 289" stroke="#C9C7C0" stroke-width="1.8" style="animation-duration:2.2s;stroke-dasharray:8 10"/><path d="M32 284 C 34 286, 36 288, 39 289 C 36 290, 34 292, 32.5 294.5" stroke="#C9C7C0" stroke-width="1.6"/></svg>
+          <div class="rt"><div class="n"><span><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5"/><path d="M12 7.2 C12.3 9.2 13 9.9 15 10.2 C13 10.5 12.3 11.2 12 13.2 C11.7 11.2 11 10.5 9 10.2 C11 9.9 11.7 9.2 12 7.2 Z" stroke="#E16259"/></svg></span>On the device</div><div class="x">Apple Intelligence. Free, nothing leaves.</div></div>
+          <div class="rt"><div class="n"><span><svg width="26" height="17" viewBox="0 0 30 20" role="img" aria-label="EU flag" style="flex:none;border-radius:2px"><rect width="30" height="20" fill="#2B4DA0"/><circle cx="15.00" cy="4.00" r="0.95" fill="#FFCC00"/><circle cx="18.00" cy="4.80" r="0.95" fill="#FFCC00"/><circle cx="20.20" cy="7.00" r="0.95" fill="#FFCC00"/><circle cx="21.00" cy="10.00" r="0.95" fill="#FFCC00"/><circle cx="20.20" cy="13.00" r="0.95" fill="#FFCC00"/><circle cx="18.00" cy="15.20" r="0.95" fill="#FFCC00"/><circle cx="15.00" cy="16.00" r="0.95" fill="#FFCC00"/><circle cx="12.00" cy="15.20" r="0.95" fill="#FFCC00"/><circle cx="9.80" cy="13.00" r="0.95" fill="#FFCC00"/><circle cx="9.00" cy="10.00" r="0.95" fill="#FFCC00"/><circle cx="9.80" cy="7.00" r="0.95" fill="#FFCC00"/><circle cx="12.00" cy="4.80" r="0.95" fill="#FFCC00"/></svg></span>Seduta Plus</div><div class="x">European models on EU servers through EUrouter. The transcript goes from your device to EUrouter directly; we never see it.</div></div>
+          <div class="rt"><div class="n"><span><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 10.6 C 10.9 10.5 12.6 12.3 12.5 14.6 C 12.4 16.9 10.6 18.6 8.4 18.5 C 6.1 18.5 4.4 16.7 4.5 14.4 C 4.6 12.2 6.3 10.6 8.5 10.6 Z M11.4 11.6 L18.8 4.4 M16.2 7 L18.3 9.1 M18.4 4.9 L20.2 6.7"/></svg></span>Your own key</div><div class="x">EUrouter (Mistral Large 3 by default), any OpenAI-compatible endpoint, or your own server.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="agents">
+    <div class="l">
+      <div class="k">AI AGENTS</div>
+      <h3>Your notes, in your AI tools.</h3>
+      <p>Ask Claude about your meetings. It reads your notes on your Mac, read-only, and only in apps you paired. Seduta uploads nothing, and audio and voices stay out.</p>
+      <!-- Anthropic marks: delete the two <img> tags to fall back to the names alone. -->
+      <div class="nm">
+        <span class="nmi"><img src="assets/claude-code.svg" alt="" width="28" height="28">Claude Code</span>
+        <span class="nmi"><img src="assets/claude.svg" alt="" width="28" height="28">Claude Chat &amp; Cowork</span>
+      </div>
+    </div>
+    <div class="term" role="img" aria-label="A terminal: asked what was decided about the launch date, the AI answers from the Spring campaign review notes">
+      <div class="tb"><i></i><i></i><i></i><span>Terminal · claude</span></div>
+      <div class="bd">
+        <div class="q"><b>›</b> <span id="tq"></span><span class="caret" id="tcq"></span></div>
+        <div class="dim" id="tread" hidden></div>
+        <div id="ta-w" hidden><span id="ta"></span><span class="caret" id="tca"></span></div>
+        <div class="dim" id="tsrc" hidden>Source: Spring campaign review · 30 Sep 2026 · 32 min</div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="faq in"><h2>Questions</h2>
+  <div class="qs">
+    <details name="faq" open><summary>Does anyone see a bot in the call?</summary><div class="a">No. Seduta records on your Mac and hears both sides of the call. Nobody joins, and nothing new shows up in the participant list.</div></details>
+    <details name="faq"><summary>Which languages?</summary><div class="a">25 European languages, and people can switch between them within one meeting. Swiss German works on the Mac as an optional download.</div></details>
+    <details name="faq"><summary>Do I need an account?</summary><div class="a">No. There is no Seduta account. Your meetings are files in your own iCloud Drive.</div></details>
+    <details name="faq"><summary>What about consent?</summary><div class="a">Recording is your call. Seduta reminds you to let everyone know, next to every record button, and it never records in secret.</div></details>
+    <details name="faq"><summary>What happens to the audio?</summary><div class="a">It stays on your device and in your own iCloud Drive folder, nowhere else. After the transcript is ready, the audio is kept for 48 hours (or the time you set), then moves to Recently Deleted, and after that it is erased. You can change both windows in Settings.</div></details>
+  </div>
+</section>
+</main>
+
+<footer class="foot-w"><div class="in foot">
+  <span class="b"><svg class="logo" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.4 C16.9 3.3 20.7 7.1 20.6 12 C20.6 16.8 16.8 20.6 12 20.6 C7.2 20.7 3.3 16.9 3.4 12.1 C3.3 7.2 7.1 3.4 12 3.4 Z" stroke="#37352F" stroke-width="1.8" stroke-linecap="round"/><circle class="dot" cx="12" cy="12" r="3.4" fill="#E16259"/><g class="bars"><rect class="bar a" x="8.6" y="7.5" width="2.6" height="9" rx="1.3" fill="#E16259"/><rect class="bar b" x="12.8" y="7.5" width="2.6" height="9" rx="1.3" fill="#E16259"/></g></svg>Seduta</span>
+  <span>Seduta is Romansh for meeting. Made by Spert in Switzerland.</span>
+  <span class="ln2"><a href="/privacy">Privacy</a><a href="/support">Support</a><a href="mailto:seduta@spert.ai">seduta@spert.ai</a></span>
+</div></footer>
+
+<!-- The drawn Mac (1200x760). Instantiated once for the desktop demo and once per phone card. -->
+<template id="mac">
+<div class="mac">
+  <div class="call">
+    <div class="call-bar"><div class="tl"><i></i><i></i><i></i></div><span>Zoom Meeting · Spring campaign review</span></div>
+    <div class="tiles">
+      <div class="tile t-s" style="--c:#5E7FA6"><b>SB</b><span>Sofia Brandt</span></div>
+      <div class="tile t-j" style="--c:#A87B55"><b>JK</b><span>Jonas Keller</span></div>
+      <div class="tile t-a" style="--c:#6E9477"><b>AR</b><span>Amélie Roux</span></div>
+      <div class="tile t-m" style="--c:#76708A"><b>Me</b><span>Me</span></div>
+    </div>
+    <div class="call-ctl"><i></i><i></i><em>End</em></div>
+  </div>
+
+  <div class="sed">
+    <div class="ov">
+      <div class="tl"><i></i><i></i><i></i></div>
+      <div class="ov-b">
+        <div class="ov-t">Seduta</div>
+        <svg class="wave" width="112" height="10" viewBox="0 0 112 10" aria-hidden="true"><path d="M2 7 C 22 4, 38 9, 58 6 S 92 3, 110 6"/></svg>
+        <div class="status">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#787774" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="4" fill="#9B9A97" stroke="none"/></svg>
+          <span class="idle">Idle</span>
+          <span class="b-start"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>Start Recording</span>
+          <span class="b-pause">‖ Pause</span>
+          <span class="ask"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#37352F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 4.6 L19.4 4.5 L19.5 19.4 L4.6 19.5 Z M8 12.3 L11 15.4 L19.8 4.8"/></svg>Ask to record calls</span>
+        </div>
+        <div class="consent">Recording is your call: let everyone know they are being recorded. · Summaries: Apple Intelligence <u>Settings</u></div>
+        <div class="lab" style="margin-top:24px">UPCOMING</div>
+        <div class="rows">
+          <div class="row r1" data-act="row1"><span class="w">Today · 14:30</span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5 C3.4 6.6 4 6 4.9 6 L13.6 6.1 C14.5 6.1 15 6.7 15 7.5 L15 16.4 C15 17.3 14.4 17.9 13.5 17.9 L4.9 18 C4 18 3.5 17.4 3.5 16.5 Z M15 10.5 L20.4 7.4 L20.5 16.6 L15 13.5"/></svg><span>Spring campaign review</span><span class="s">Zoom</span><svg class="hint h-row1" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" style="left:198px;width:190px;bottom:-4px"><path d="M2 6.5 C 18 3.5, 34 8.5, 52 5.5 S 84 3.5, 98 6"/></svg></div>
+          <div class="row"><span class="w">Today · 16:00</span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 C4 7.4 7.6 4.6 12 4.6 C16.5 4.6 20 7.4 20 11.4 C20 15.4 16.4 18.2 12 18.2 C10.9 18.2 9.9 18 9 17.7 L4.6 19.6 L5.9 15.9 C4.7 14.7 4 13.2 4 11.5 Z"/></svg><span>Weekly studio sync</span><span class="s">Teams</span></div>
+          <div class="row"><span class="w">Tomorrow · 12:30</span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11 C11 11 12.4 9.5 12.4 7.6 C12.4 5.7 11 4.3 9 4.3 C7.1 4.3 5.7 5.7 5.7 7.6 C5.7 9.5 7.1 11 9 11 Z M3 19.5 C3.4 16 5.8 13.8 9 13.8 C12.3 13.8 14.6 16 15 19.5 M15.5 4.6 C17.2 4.9 18.3 6.2 18.3 7.8 C18.3 9.4 17.2 10.6 15.7 10.9 M17.4 13.9 C19.5 14.6 20.8 16.6 21 19.4"/></svg><span>Lunch with Tom</span><span class="s">In person</span></div>
+        </div>
+        <div class="sep"></div>
+        <div class="lab" style="margin-top:22px">RECORDED</div>
+        <div class="rows">
+          <div class="row rw spring" data-act="open"><span class="w">30 Sep 2026 at 14:30</span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5"/></svg><span class="t">Spring campaign review</span><span class="pl"><span class="pilltag p-blue p-tr">Transcribing…</span><span class="pilltag p-blue p-su">Summarized</span></span><span class="prog"><i></i></span><svg class="hint h-row" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" style="left:198px;width:200px;bottom:-4px"><path d="M2 6.5 C 18 3.5, 34 8.5, 52 5.5 S 84 3.5, 98 6"/></svg></div>
+          <div class="row rw"><span class="w">29 Sep 2026 at 10:00</span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5"/></svg><span>Client call · Nordlicht rebrand</span><span class="pilltag p-blue">Summarized</span></div>
+          <div class="row rw"><span class="w">28 Sep 2026 at 15:00</span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3.5 L16 3.5 C16.8 3.5 17.2 4 17.2 4.7 L17.2 19.3 C17.2 20 16.8 20.5 16 20.5 L8 20.5 C7.2 20.5 6.8 20 6.8 19.3 L6.8 4.7 C6.8 4 7.2 3.5 8 3.5 Z"/></svg><span>1:1 Jonas</span><span class="pilltag p-green">Final</span></div>
+          <div class="row rw"><span class="w">27 Sep 2026 at 14:00</span><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6 C5.5 5.4 5.9 5 6.5 5 L17.5 5.1 C18.1 5.1 18.5 5.5 18.5 6.1 L18.5 15 L5.5 15 Z M3 18.6 L21 18.5"/></svg><span>Budget check Q2</span><span class="pilltag p-amber">Transcribed</span></div>
+        </div>
+        <div class="ov-f"><span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#37352F" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7 L20 7 M4 12 L20 12 M4 17 L20 17"/></svg>Settings</span><span class="drop">Drop audio files to import</span></div>
+      </div>
+    </div>
+
+    <div class="dt">
+      <div class="dt-top"><div class="tl"><i></i><i></i><i></i></div><span class="back" data-act="back">‹  All meetings</span><span class="crumb">Seduta  /  <b>Spring campaign review</b></span></div>
+      <div class="dt-bar">
+        <div class="tabs"><button type="button" class="t1" data-act="tab-sum">Summary</button><button type="button" class="t2" data-act="tab-tr">Transcript<svg class="hint h-tab" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" style="width:100%"><path d="M2 6.5 C 18 3.5, 34 8.5, 52 5.5 S 84 3.5, 98 6"/></svg></button></div>
+        <div class="tplwrap">
+          <div class="split"><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E16259" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 C12.6 8.4 15.6 11.4 21 12 C15.6 12.6 12.6 15.6 12 21 C11.4 15.6 8.4 12.6 3 12 C8.4 11.4 11.4 8.4 12 3 Z"/></svg>Summarize with&nbsp;<b class="tpl-name">Standard</b></span><button type="button" data-act="picker" aria-label="Choose template" aria-haspopup="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5 L12 15.5 L18 9.5"/></svg><svg class="hint h-pick" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6.5 C 18 3.5, 34 8.5, 52 5.5 S 84 3.5, 98 6"/></svg></button></div>
+          <div class="picker" role="group" aria-label="Template">
+            <div class="h">TEMPLATE</div>
+            <button type="button" class="pk" data-act="pick" data-t="Standard"><span class="mk"></span><span><b>Standard</b><small>Summary, decisions, action items</small></span></button>
+            <button type="button" class="pk" data-act="pick" data-t="Action items"><span class="mk"></span><span><b>Action items</b><small>Only who does what, by when</small></span></button>
+            <button type="button" class="pk" data-act="pick" data-t="Detailed"><span class="mk"></span><span><b>Detailed</b><small>A paragraph per topic</small></span></button>
+            <div class="more"></div><div class="mg">Manage templates…</div>
+          </div>
+        </div>
+        <span class="dt-x">Copy</span><span class="dt-x">Share</span><span class="dt-x" style="width:34px;justify-content:center;letter-spacing:1px">···</span>
+      </div>
+      <div class="dt-body">
+        <div class="dt-h"><b>Spring campaign review</b><span>30 Sep 2026 at 14:30 · 32 min</span></div>
+        <svg class="wave" width="200" height="10" viewBox="0 0 200 10" style="margin-top:4px" aria-hidden="true"><path d="M2 7 C 40 4, 70 9, 110 6 S 170 3, 198 6"/></svg>
+
+        <div class="tr">
+          <div class="spk"><span style="--c:#3B7FB5"><i></i>Sofia Brandt</span><span style="--c:#D9731F"><i></i>Jonas Keller</span><span style="--c:#3F8F5E"><i></i>Amélie Roux</span><span style="--c:#37352F"><i></i>Me</span></div>
+          <div class="lines">
+            <div class="ln"><div class="who" style="--c:#3B7FB5"><i></i><b data-tip="0">Sofia Brandt<span class="tip">Voice remembered</span></b><em>00:12</em></div><p>Let's start with the launch date. Are we still on for the 14th?</p></div>
+            <div class="ln"><div class="who" style="--c:#D9731F"><i></i><b data-tip="1">Jonas Keller<span class="tip">Voice remembered</span></b><em>00:19</em></div><p>The print files are late, so the 21st is safer.</p></div>
+            <div class="ln"><div class="who" style="--c:#3F8F5E"><i></i><b data-tip="2">Amélie Roux<span class="tip">Voice remembered</span></b><em>00:31</em></div><p>I can ask the printer for a rush slot on Monday.</p></div>
+            <div class="ln"><div class="who" style="--c:#37352F"><i></i><b data-tip="3">Me<span class="tip">Voice remembered</span></b><em>00:44</em></div><p>Good. If they can't do it, we move to the 21st and tell the client on Friday.</p></div>
+            <div class="ln"><div class="who" style="--c:#3B7FB5"><i></i><b data-tip="4">Sofia Brandt<span class="tip">Voice remembered</span></b><em>01:02</em></div><p>And the budget for the social ads stays at 8,000.</p></div>
+            <div class="ln"><div class="who" style="--c:#D9731F"><i></i><b data-tip="5">Jonas Keller<span class="tip">Voice remembered</span></b><em>01:20</em></div><p>Agreed. The poster artwork went through last night, so only the flyers are behind.</p></div>
+            <div class="ln"><div class="who" style="--c:#3F8F5E"><i></i><b data-tip="6">Amélie Roux<span class="tip">Voice remembered</span></b><em>01:41</em></div><p>The printer quoted three working days for the flyers. A rush slot would make it one, but it costs extra.</p></div>
+            <div class="ln"><div class="who" style="--c:#37352F"><i></i><b data-tip="7">Me<span class="tip">Voice remembered</span></b><em>02:10</em></div><p>How much extra?</p></div>
+            <div class="ln"><div class="who" style="--c:#3F8F5E"><i></i><b data-tip="8">Amélie Roux<span class="tip">Voice remembered</span></b><em>02:15</em></div><p>About 400 francs. I think that is fine if it saves the 14th.</p></div>
+          </div>
+        </div>
+
+        <div class="sm">
+          <div class="lab">YOUR NOTES</div>
+          <div class="note-in">Add a note</div>
+          <div class="s-std">
+            <div class="lab f">SUMMARY</div>
+            <p class="ed" contenteditable="true" spellcheck="false" style="margin-top:4px">The team moved the spring campaign launch from the 14th to the 21st unless the printer can rush the files. The social ads budget stays at CHF 8,000.</p>
+            <div class="lab">KEY POINTS</div>
+            <ul class="ed" contenteditable="true" spellcheck="false"><li>The print files are late; only the flyers are behind, the posters are done.</li><li>A rush slot at the printer would cost about CHF 400 and bring the flyers down to one working day.</li><li>Social ads: two weeks of paid reach, then a week of retargeting.</li></ul>
+            <div class="lab">DECISIONS</div>
+            <ul class="ed" contenteditable="true" spellcheck="false"><li>Launch on the 21st if there is no rush slot.</li><li>Social ads budget: CHF 8,000.</li></ul>
+          </div>
+          <div class="s-det">
+            <h4>Launch date</h4><p class="ed" contenteditable="true" spellcheck="false">Sofia opened with the launch date. The team keeps the 14th only if the printer can rush the flyers; otherwise the launch moves to the 21st. You tell the client on Friday either way.</p>
+            <h4>Print</h4><p class="ed" contenteditable="true" spellcheck="false">The poster artwork went through last night, so only the flyers are behind. The printer quoted three working days; a rush slot would make it one and cost about CHF 400. Amélie asks for a slot on Monday.</p>
+            <h4>Budget</h4><p class="ed" contenteditable="true" spellcheck="false">The social ads budget stays at CHF 8,000: two weeks of paid reach, then a week of retargeting. Stories lead; the carousel is kept for retargeting.</p>
+          </div>
+          <div class="a-list">
+            <div class="lab">ACTION ITEMS</div>
+            <div class="ai-l">
+              <div class="ai" data-i="0"><button type="button" class="cb" data-act="chk" role="checkbox" aria-checked="false" aria-label="Done: Jonas, send final print files"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d=""/></svg></button><span class="tx" contenteditable="true" spellcheck="false">Jonas: send final print files</span></div>
+              <div class="ai" data-i="1"><button type="button" class="cb" data-act="chk" role="checkbox" aria-checked="false" aria-label="Done: Amélie, ask the printer for a rush slot"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d=""/></svg></button><span class="tx" contenteditable="true" spellcheck="false">Amélie: ask the printer for a rush slot (Monday)</span></div>
+              <div class="ai" data-i="2"><button type="button" class="cb" data-act="chk" role="checkbox" aria-checked="false" aria-label="Done: Me, tell the client about the date"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d=""/></svg></button><span class="tx" contenteditable="true" spellcheck="false">Me: tell the client about the date (Friday)</span></div>
+            </div>
+          </div>
+          <div class="a-tab">
+            <div class="lab f">ACTION ITEMS</div>
+            <div class="tbl">
+              <div class="aitr" data-i="0"><button type="button" class="cb" data-act="chk" role="checkbox" aria-checked="false" aria-label="Done: Jonas, send final print files"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d=""/></svg></button><span class="ow">Jonas Keller</span><span class="tx" contenteditable="true" spellcheck="false">Send final print files</span><span class="du">—</span></div>
+              <div class="aitr" data-i="1"><button type="button" class="cb" data-act="chk" role="checkbox" aria-checked="false" aria-label="Done: Amélie, ask the printer for a rush slot"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d=""/></svg></button><span class="ow">Amélie Roux</span><span class="tx" contenteditable="true" spellcheck="false">Ask the printer for a rush slot</span><span class="du">Mon</span></div>
+              <div class="aitr" data-i="2"><button type="button" class="cb" data-act="chk" role="checkbox" aria-checked="false" aria-label="Done: Me, tell the client about the date"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d=""/></svg></button><span class="ow">Me</span><span class="tx" contenteditable="true" spellcheck="false">Tell the client about the date</span><span class="du">Fri</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notif" data-act="notif">
+    <div class="nh"><div class="ni"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#37352F" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2" fill="#E16259" stroke="none"/></svg></div>
+      <div class="nt"><b class="n-ask">Zoom call detected: Spring campaign review</b><b class="n-done">Summary ready · 32 min</b><span class="n-ask">Record this meeting?</span><span class="n-done">Spring campaign review: 3 action items, 1 for you</span></div><time>now</time></div>
+    <div class="n-ask"><div class="nb"><button type="button" class="go" data-act="rec">Record<svg class="hint h-rec" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6.5 C 18 3.5, 34 8.5, 52 5.5 S 84 3.5, 98 6"/></svg></button><button type="button" class="no" data-act="notthis">Not this one</button></div><div class="consent">Recording is your call: let everyone know they are being recorded.</div></div>
+  </div>
+
+  <div class="menubar">
+    <b class="an-s">Seduta</b><b class="an-z">Zoom</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span>
+    <span class="mb-r">
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 C8.5 4 15.5 4 21 9 M6.5 12.6 C10 9.6 14 9.6 17.5 12.6 M10 16.2 C11.2 15.2 12.8 15.2 14 16.2"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8 L20 8 M4 16 L20 16"/><circle cx="9" cy="8" r="2.2" fill="#fff"/><circle cx="15" cy="16" r="2.2" fill="#fff"/></svg>
+      <button type="button" class="glyph" data-act="glyph" aria-label="Seduta menu">
+        <svg class="g-idle" width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4" fill="#E16259" stroke="none"/></svg>
+        <svg class="g-rec rec" width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><rect class="bar a" x="8.6" y="7.5" width="2.6" height="9" rx="1.3" fill="#E16259" stroke="none"/><rect class="bar b" x="12.8" y="7.5" width="2.6" height="9" rx="1.3" fill="#E16259" stroke="none"/></svg>
+        <svg class="hint h-gl" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6.5 C 18 3.5, 34 8.5, 52 5.5 S 84 3.5, 98 6"/></svg>
+      </button>
+      <span class="clk">Wed 30 Sep  14:29</span>
+    </span>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E16259" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="4" fill="#E16259" stroke="none"/></svg><b>Recording <i class="tmr">12:04</i></b><span>Spring campaign review</span></div>
+    <div class="mic">Your mic: good</div>
+    <div class="pb"><button type="button" class="b-stop" data-act="stop"><i></i>Stop<svg class="hint h-stop" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6.5 C 18 3.5, 34 8.5, 52 5.5 S 84 3.5, 98 6"/></svg></button><span class="pz">‖  Pause</span></div>
+    <div class="an">Add a note</div>
+    <div class="last"><b>Me</b> <span>00:44</span><br>Good. If they can't do it, we move to the 21st and tell the client on Friday.</div>
+    <div class="ck"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 4.6 L19.4 4.5 L19.5 19.4 L4.6 19.5 Z M8 12.3 L11 15.4 L19.8 4.8"/></svg>Ask before recording calls</div>
+    <div class="consent">Recording is your call: let everyone know they are being recorded.</div>
+    <div class="hr"></div>
+    <div class="lab">UPCOMING</div>
+    <div class="up"><div><span>Weekly studio sync</span><span>16:00 · Teams</span></div><div><span>Lunch with Tom</span><span>12:30 · In person</span></div></div>
+    <div class="hr"></div>
+    <div class="pb"><span class="chip">Open Seduta</span><span class="chip">Settings</span></div>
+  </div>
+</div>
+</template>
+
+<script src="/home.js" defer></script>
+</body>
+</html>
