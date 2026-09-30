@@ -70,6 +70,20 @@ notifications and the inlined root, with a made-up certificate chain (openssl) a
 To try it locally: `npx wrangler pages dev --binding EUROUTER_MANAGEMENT_KEY=dummy --kv MINT`, then
 `curl -X POST -d '{}' localhost:8788/api/key` answers 400.
 
+## Waitlist (`functions/api/waitlist.js`)
+
+`POST /api/waitlist` `{"email", "company"}`: `company` is a honeypot (filled: 200, nothing stored). A valid address
+is stored in KV `WAITLIST` as `email:<lowercased address>` -> `{"date":"YYYY-MM-DD"}` (the first date is kept; no IP,
+no user agent) and answers 200 `{"ok":true}` whether or not it was listed. Invalid or bad JSON: 400
+`{"error":"invalid"}`; no binding: 503; not POST: 405. No rate limit beyond the honeypot. Test: `node test/waitlist.test.mjs`.
+
+Setup, once: `npx wrangler kv namespace create WAITLIST`, put the id into the second `[[kv_namespaces]]` block of
+wrangler.toml, deploy. Export the list at launch (privacy.html promises deletion afterwards):
+
+    npx wrangler kv key list --namespace-id <id> --remote | jq -r '.[].name | sub("^email:";"")'
+
+Delete one address: `npx wrangler kv key delete "email:<address>" --namespace-id <id> --remote`.
+
 ### Worth knowing
 
 - No rate limit per IP: seduta.spert.ai's DNS is at Namecheap, so Cloudflare's rate-limiting rules are not available. Unverified requests cost only a signature check and never reach EUrouter; a verified subscriber is held to one request a minute by the KV marker.

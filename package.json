@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler pages dev",
-    "test": "node test/mint.test.mjs"
+    "test": "node test/mint.test.mjs && node test/waitlist.test.mjs"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^3.1.0"
