@@ -71,16 +71,14 @@ function initSlots() {
 
 /* ---------- pricing ---------- */
 function initPricing() {
-  const L = ((navigator.languages && navigator.languages.join(',')) || navigator.language || '');
-  let cur = /-CH\b/i.test(L) ? 'CHF' : /en-US\b/i.test(L) ? 'USD' : 'EUR', yearly = false;
-  const m = (n) => (cur === 'EUR' ? '€' + n : cur === 'USD' ? '$' + n : 'CHF ' + n);
+  // CHF is the base price; Apple sets every other storefront (docs/decisions.md, 30 Sep), so no converted numbers here.
+  let yearly = false;
+  const m = (n) => 'CHF ' + n;
   const draw = () => {
     $$('[data-p]').forEach((e) => { const k = e.dataset.p; e.textContent = m(k === 'free' ? 0 : k === 'byok' ? 30 : yearly ? 35 : 5); });
     $('#per').textContent = yearly ? 'a year' : 'a month';
-    $$('#cur button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.c === cur)));
     $$('#per-seg button').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.y === '1') === yearly)));
   };
-  $('#cur').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { cur = b.dataset.c; draw(); } });
   $('#per-seg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { yearly = b.dataset.y === '1'; draw(); } });
   draw();
 }
