@@ -72,21 +72,35 @@ function initSlots() {
 
 /* ---------- pricing ---------- */
 function initPricing() {
-  // Apple's own price for the visitor's storefront (/api/price, by the country Cloudflare sees; table built by
-  // scripts/site_prices.py from App Store Connect). CHF 30/5/35 is the base and the fallback, never a converted number.
+  // Apple's own price per App Store country (prices.json, built by scripts/site_prices.py from App Store Connect's
+  // export); the visitor's country (/api/price, by Cloudflare) is preselected and any other can be picked.
+  // CHF 30/5/35 is the base and the fallback, never a converted number.
   const lang = navigator.language || 'en';
-  let yearly = false, p = ['CHF', '30', '5', '35'], cc = 'CH';
-  const m = (n) => { n = Number(n); try { return new Intl.NumberFormat(lang, { style: 'currency', currency: p[0], minimumFractionDigits: 0, maximumFractionDigits: Number.isInteger(n) ? 0 : 2 }).format(n); } catch (_) { return p[0] + ' ' + n; } };
+  let yearly = false, table = { CH: ['CHF', '30', '5', '35'] }, cc = 'CH';
+  const m = (n, cur) => { n = Number(n); try { return new Intl.NumberFormat(lang, { style: 'currency', currency: cur, minimumFractionDigits: 0, maximumFractionDigits: Number.isInteger(n) ? 0 : 2 }).format(n); } catch (_) { return cur + ' ' + n; } };
+  let names; try { names = new Intl.DisplayNames(['en'], { type: 'region' }); } catch (_) {}
+  const nameOf = (c) => { try { return names ? names.of(c) : c; } catch (_) { return c; } };
+  const note = $('#price-note');
   const draw = () => {
-    $$('[data-p]').forEach((e) => { const k = e.dataset.p; e.textContent = m(k === 'free' ? 0 : k === 'byok' ? p[1] : yearly ? p[3] : p[2]); });
+    const p = table[cc] || table.CH;
+    $$('[data-p]').forEach((e) => { const k = e.dataset.p; e.textContent = m(k === 'free' ? 0 : k === 'byok' ? p[1] : yearly ? p[3] : p[2], p[0]); });
     $('#per').textContent = yearly ? 'a year' : 'a month';
     $$('#per-seg button').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.y === '1') === yearly)));
-    let name = cc; try { name = new Intl.DisplayNames(['en'], { type: 'region' }).of(cc); } catch (_) {}
-    $('#price-note').textContent = 'App Store prices for ' + name + '. Other countries see their own price in the App Store.';
+    const sel = $('#country'); if (sel) sel.value = cc;
+  };
+  const build = () => {
+    const opts = Object.keys(table).map((c) => [nameOf(c), c]).sort((x, y) => x[0].localeCompare(y[0], 'en'));
+    note.innerHTML = '<label for="country">App Store prices for</label> <select id="country"></select>';
+    const sel = $('#country');
+    opts.forEach(([n, c]) => { const o = document.createElement('option'); o.value = c; o.textContent = n; sel.appendChild(o); });
+    sel.addEventListener('change', () => { cc = sel.value; draw(); });
   };
   $('#per-seg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { yearly = b.dataset.y === '1'; draw(); } });
   draw();
-  fetch('/api/price').then((r) => r.json()).then((j) => { if (j && j.price) { p = j.price; cc = j.country; draw(); } }).catch(() => {});
+  Promise.all([
+    fetch('prices.json').then((r) => r.json()),
+    fetch('/api/price').then((r) => (r.ok ? r.json() : null)).catch(() => null),
+  ]).then(([t, here]) => { table = t; if (here && t[here.country]) cc = here.country; build(); draw(); }).catch(() => {});
 }
 
 /* ---------- terminal in "Under the hood" ---------- */

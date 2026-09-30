@@ -282,7 +282,7 @@ svg.h-row1{display:none!important}
 .pnum{display:flex;gap:10px;padding:0 2px}.pnum b{font-size:13px;font-weight:600;color:var(--acc-t);line-height:24px}.pnum span{font-size:17px;line-height:1.4}
 .pend{min-height:300px;border-radius:14px;background:var(--panel);padding:24px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
 .pend .endt{font-size:34px;letter-spacing:-.03em}
-.pend .ends{font-size:15px;margin:10px auto 16px;max-width:280px}
+.pend .ends{display:none}
 .pend .wl{width:100%;margin-top:0}
 .pend .wl-form{flex-direction:column}.pend .wl-in{width:100%}
 .pnav{margin-top:16px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;max-width:400px;margin-left:auto;margin-right:auto}
@@ -319,6 +319,11 @@ svg.h-row1{display:none!important}
 .la .bt{display:flex;gap:6px}.la .bt span{flex:1;height:28px;border-radius:14px;background:rgba(255,255,255,.14);font-size:11px;font-weight:600;display:grid;place-items:center}.la .bt span+span{background:var(--acc)}
 .wat{width:150px}.wat .fr{width:150px;height:175px;border-radius:40px;padding:11px}.wat img{width:128px;height:153px;border-radius:30px}
 .dev-p{display:none}
+/* desktop: the four devices always stay on one row; they shrink instead of wrapping */
+@media (min-width:900px){.stage{flex-wrap:nowrap;gap:clamp(20px,2.8vw,40px)}}
+@media (min-width:900px) and (max-width:1439px){.stage .dev{zoom:.86}}
+@media (min-width:900px) and (max-width:1279px){.stage .dev{zoom:.74}}
+@media (min-width:900px) and (max-width:1099px){.stage .dev{zoom:.64}}
 
 /* private */
 .priv{padding-top:var(--sec);padding-bottom:var(--sec);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,6.7vw,96px)}
@@ -480,3 +485,5 @@ svg.h-row1{display:none!important}
   .logo .bars{display:none}
   .pcards{scroll-behavior:auto}
 }
+
+#country{font:inherit;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:6px;padding:4px 26px 4px 8px;margin-left:4px;max-width:220px}
