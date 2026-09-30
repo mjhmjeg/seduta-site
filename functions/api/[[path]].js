@@ -9,10 +9,17 @@
 // No database: the key is named after the subscription, so EUrouter's key list is the record of who has one.
 // One secret, EUROUTER_MANAGEMENT_KEY (a Pages secret, never in this public folder).
 
-/// Credits a month per product (≈ €4, decision of 2026-09-30). Anything not listed is refused.
+/// Credits a month per product (≈ €4, decision of 2026-09-30). Anything not listed is refused. Sandbox purchases
+/// (TestFlight, App Review) cost nothing but spend real credits, so they get 1.00.
 export const CAP = {
   "ai.spert.seduta.plus.monthly": 4.7,
   "ai.spert.seduta.plus.yearly": 4.7,
+}
+export const SANDBOX_CAP = 1
+
+export function capFor(transaction) {
+  const cap = CAP[transaction.productId]
+  return cap && transaction.environment !== "Production" ? SANDBOX_CAP : cap
 }
 
 export const BUNDLE_ID = "ai.spert.MeetingTranscriber"
@@ -92,7 +99,7 @@ async function mint(body, env, verifiers) {
   const transaction = await verify(verifiers, (v) => v.verifyAndDecodeTransaction(body.jws))
   if (!transaction) return json({ error: "the transaction could not be verified" }, 400)
 
-  const cap = CAP[transaction.productId]
+  const cap = capFor(transaction)
   if (!cap) return json({ error: "not a Seduta Plus subscription" }, 400)
   if (transaction.revocationDate) return json({ error: "this subscription was refunded" }, 402)
   if (!transaction.expiresDate || transaction.expiresDate < Date.now()) return json({ error: "this subscription has expired" }, 402)
@@ -104,8 +111,10 @@ async function mint(body, env, verifiers) {
     return json({ error: "a key was issued less than a minute ago" }, 429)
   }
 
-  // A key is shown only once, so a second call means the app lost it: the old key goes. A fresh key would start
-  // the month at zero, so what the old keys spent this month comes off the new key's limit.
+  // A key is shown only once, so the old key is always replaced. The app asks when it has no key, or when EUrouter
+  // says the key reached its limit (at most once a day). What this subscriber's keys spent this month comes off the
+  // new key's limit, so asking again never resets the month; a key cut in an earlier month is replaced with the
+  // full cap minus this month's spend, which is how a cut key heals. Nothing left: 429, and the old key stays.
   const limit = round(cap - spentThisMonth(existing, cap, now))
   if (limit <= 0) return json({ error: "this month's allowance is used up" }, 429)
   for (const key of existing) await remove(key.hash, env)
@@ -128,8 +137,7 @@ async function mint(body, env, verifiers) {
   return json({ key: created.key, limit, resets: "monthly" })
 }
 
-/// Apple tells us when a subscription lapses, is refunded or revoked; the key goes with it. A renewal puts a key
-/// whose limit was cut by a replacement back to the full allowance.
+/// Apple tells us when a subscription lapses, is refunded or revoked; the key goes with it.
 async function notify(body, env, verifiers) {
   if (typeof body?.signedPayload !== "string") return json({ error: "no signedPayload" }, 400)
   const payload = await verify(verifiers, (v) => v.verifyAndDecodeNotification(body.signedPayload))
@@ -137,26 +145,11 @@ async function notify(body, env, verifiers) {
 
   const type = payload.notificationType
   const signed = payload.data?.signedTransactionInfo
-  if (!signed || !(REVOKING.includes(type) || type === "DID_RENEW")) return json({ ok: true, ignored: type })
+  if (!signed || !REVOKING.includes(type)) return json({ ok: true, ignored: type })
   const transaction = await verify(verifiers, (v) => v.verifyAndDecodeTransaction(signed))
   if (!transaction) return json({ error: "the transaction could not be verified" }, 400)
 
   const existing = await find(keyName(transaction), env)
-  if (type === "DID_RENEW") {
-    const cap = CAP[transaction.productId]
-    const month = monthStart(Date.now())
-    let restored = 0
-    for (const key of existing) {
-      if (cap && key.limit < cap && Date.parse(key.created_at) < month) {
-        // ponytail: PATCH /keys/{hash} is live on EUrouter (it validates limit, limit_reset, disabled) but not in
-        // their published docs yet; if it goes away, cut keys stay cut until the app asks for a new key.
-        const response = await eurouter(`/keys/${key.hash}`, env, { method: "PATCH", body: JSON.stringify({ limit: cap }) })
-        if (!response.ok) throw new EUrouterError(`update said ${response.status}`)
-        restored++
-      }
-    }
-    return json({ ok: true, restored })
-  }
   for (const key of existing) await remove(key.hash, env)
   return json({ ok: true, revoked: existing.length })
 }

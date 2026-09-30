@@ -3,7 +3,7 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { makeChain, sign, transaction, notification } from "./fake-apple.mjs"
-import { handle, makeVerifiers, CAP, APPLE_ROOTS, APP_APPLE_ID } from "../functions/api/[[path]].js"
+import { handle, makeVerifiers, CAP, SANDBOX_CAP, APPLE_ROOTS, APP_APPLE_ID } from "../functions/api/[[path]].js"
 
 const chain = makeChain()
 const verifiers = await makeVerifiers([chain.root], 1234)
@@ -85,6 +85,7 @@ const tests = {
     fake = eurouter()
     assert.equal((await mint({ environment: "Sandbox" })).status, 200)
     assert.equal(fake.keys[0].name, "seduta-sandbox-2000000000000001")
+    assert.equal(fake.keys[0].limit, 1)
     for (const environment of ["Xcode", "LocalTesting"]) {
       fake = eurouter()
       assert.equal((await mint({ environment })).status, 400)
@@ -158,10 +159,38 @@ const tests = {
     assert.equal((await post("/api/notify", { signedPayload: notification(chain, "EXPIRED", tx, "Sandbox") })).status, 200)
     assert.equal(keys.length, 0)
   },
-  async "a renewal restores a key cut in an earlier month to the full cap"() {
-    const { keys } = eurouter([key({ created_at: "2026-01-01T00:00:00Z", limit: 1.5 })])
+  async "self-healing: a key cut in an earlier month is replaced with the cap minus this month's spend"() {
+    const { keys } = eurouter([key({ created_at: "2026-01-01T00:00:00Z", limit: 1.5, usage_monthly: 0.2 })])
+    const out = await read(await mint())
+    assert.equal(out.status, 200)
+    assert.ok(Math.abs(out.limit - 4.5) < 1e-9, `limit ${out.limit}`)
+    assert.deepEqual(keys.map((k) => k.hash), ["new1"])
+  },
+  async "limit reached this month: 429 and the old key is kept"() {
+    const created_at = new Date(Date.now() - 2 * MINUTE).toISOString()
+    if (new Date(created_at).getUTCMonth() !== new Date().getUTCMonth()) return
+    const { calls, keys } = eurouter([key({ created_at, limit: 4.7, usage_monthly: 4.7 })])
+    assert.equal((await mint()).status, 429)
+    assert.deepEqual(calls, ["GET /keys", "GET /keys"])
+    assert.equal(keys.length, 1)
+  },
+  async "Sandbox keys get 1.00 a month, Production 4.70"() {
+    for (const productId of Object.keys(CAP)) {
+      eurouter()
+      assert.equal((await read(await mint({ productId, environment: "Sandbox" }))).limit, 1)
+      eurouter()
+      assert.equal((await read(await mint({ productId, environment: "Production" }))).limit, 4.7)
+    }
+    assert.equal(SANDBOX_CAP, 1)
+  },
+  async "Sandbox carry-over counts against 1.00"() {
+    eurouter([key({ name: "seduta-sandbox-2000000000000001", created_at: "2026-01-01T00:00:00Z", usage_monthly: 0.4 })])
+    assert.ok(Math.abs((await read(await mint({ environment: "Sandbox" }))).limit - 0.6) < 1e-9)
+  },
+  async "renewals are ignored (no PATCH)"() {
+    const { calls } = eurouter([key({ created_at: "2026-01-01T00:00:00Z", limit: 1.5 })])
     await post("/api/notify", { signedPayload: notification(chain, "DID_RENEW", sign(chain, transaction())) })
-    assert.equal(keys[0].limit, 4.7)
+    assert.deepEqual(calls, [])
   },
   "the inlined Apple root is the committed AppleRootCA-G3.cer"() {
     const file = readFileSync(new URL("../functions/api/AppleRootCA-G3.cer", import.meta.url)).toString("base64")
