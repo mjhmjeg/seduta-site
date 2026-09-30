@@ -6,11 +6,12 @@ compatibility_date = "2026-09-01"
 compatibility_flags = ["nodejs_compat"]   # @apple/app-store-server-library is written for Node
 
 # Refunded subscriptions and the 60 s marker (README: Setup, step 3). Replace the id after `wrangler kv namespace create MINT`.
-[[kv_namespaces]]
-binding = "MINT"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+# Parked until the App Store setup (Apple ID, management key): without MINT, /api/key fails closed. Uncomment with the real id.
+# [[kv_namespaces]]
+# binding = "MINT"
+# id = "REPLACE_WITH_KV_NAMESPACE_ID"
 
 # Waitlist addresses (README: Waitlist). Replace the id after `wrangler kv namespace create WAITLIST`.
 [[kv_namespaces]]
 binding = "WAITLIST"
-id = "REPLACE_WITH_WAITLIST_KV_ID"
+id = "30384b0d05bf4d9a8cc51e9e104a6e38"
