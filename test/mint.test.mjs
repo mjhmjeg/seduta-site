@@ -213,6 +213,15 @@ const tests = {
     const later = transaction({ purchaseDate: Date.now() + MINUTE, expiresDate: Date.now() + 30 * 86_400_000 })
     assert.equal((await post("/api/key", { jws: sign(chain, later) })).status, 200, "a new subscription after the refund works")
   },
+  async "the two 429s say which: spent vs recent"() {
+    eurouter()
+    assert.equal((await mint()).status, 200)
+    assert.equal((await read(await mint())).reason, "recent")
+    const created_at = new Date(Date.now() - 2 * MINUTE).toISOString()
+    if (new Date(created_at).getUTCMonth() !== new Date().getUTCMonth()) return
+    eurouter([key({ created_at, limit: 4.7, usage_monthly: 4.7 })])
+    assert.equal((await read(await mint())).reason, "spent")
+  },
   async "Family Sharing is refused before EUrouter"() {
     const { calls } = eurouter()
     assert.equal((await mint({ inAppOwnershipType: "FAMILY_SHARED" })).status, 402)

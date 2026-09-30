@@ -3,7 +3,8 @@
 // Served by Cloudflare Pages Functions at https://seduta.spert.ai/api/* (README.md has the deploy steps).
 //
 //   POST /api/key     {"jws": "<StoreKit 2 Transaction.jwsRepresentation>"}  ->  200 {key, limit, resets}
-//                     errors {"error"}: 400 bad input, 402 expired/refunded, 429 too many requests, 502 EUrouter
+//                     errors {"error"}: 400 bad input, 402 expired/refunded, 502 EUrouter, 429 with "reason":
+//                     "spent" (this month's allowance is used up) or "recent" (a key was issued a moment ago, retry)
 //   POST /api/notify  App Store Server Notifications V2 (production and sandbox send to the same URL)
 //
 // The key is named after the subscription, so EUrouter's key list is the record of who has one and what it spent.
@@ -118,14 +119,14 @@ async function mint(body, env, verifiers) {
   // before the refund is refused; a new subscription after it has a later purchase date and goes through.
   const revokedAt = Number(await kv.get(`revoked:${name}`))
   if (revokedAt && !(transaction.purchaseDate > revokedAt)) return json({ error: "this subscription was refunded" }, 402)
-  if (await kv.get(`recent:${name}`)) return json({ error: "a key was requested less than a minute ago" }, 429)
+  if (await kv.get(`recent:${name}`)) return json({ error: "a key was requested less than a minute ago", reason: "recent" }, 429)
   await kv.put(`recent:${name}`, "1", { expirationTtl: 60 })   // 60 s is KV's shortest expiry
 
   const now = Date.now()
   const existing = await find(name, env)
   // A missing or unreadable created_at counts as just now: refuse rather than guess.
   if (existing.some((key) => !(now - Date.parse(key.created_at) >= MIN_KEY_AGE_MS))) {
-    return json({ error: "a key was issued less than a minute ago" }, 429)
+    return json({ error: "a key was issued less than a minute ago", reason: "recent" }, 429)
   }
 
   // A key is shown only once, so the old key is always replaced. The app asks when it has no key, or when EUrouter
@@ -133,7 +134,7 @@ async function mint(body, env, verifiers) {
   // new key's limit, so asking again never resets the month; a key cut in an earlier month is replaced with the
   // full cap minus this month's spend, which is how a cut key heals. Nothing left: 429, and the old key stays.
   const limit = round(cap - spentThisMonth(existing, cap, now))
-  if (limit <= 0) return json({ error: "this month's allowance is used up" }, 429)
+  if (limit <= 0) return json({ error: "this month's allowance is used up", reason: "spent" }, 429)
   for (const key of existing) await remove(key.hash, env)
 
   const response = await eurouter("/keys", env, {
@@ -149,7 +150,7 @@ async function mint(body, env, verifiers) {
   const winner = siblings.sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at) || a.hash.localeCompare(b.hash))[0]
   if (winner && winner.hash !== created.data?.hash) {
     await remove(created.data?.hash, env)
-    return json({ error: "a key was issued less than a minute ago" }, 429)
+    return json({ error: "a key was issued less than a minute ago", reason: "recent" }, 429)
   }
   return json({ key: created.key, limit, resets: "monthly" })
 }
