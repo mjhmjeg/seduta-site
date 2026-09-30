@@ -487,3 +487,6 @@ svg.h-row1{display:none!important}
 }
 
 #country{font:inherit;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:6px;padding:4px 26px 4px 8px;margin-left:4px;max-width:220px}
+
+/* footer: comparison links (scripts/vs_pages.py) */
+.vsl{padding-bottom:40px;margin-top:-16px;display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px}.vsl a{color:var(--ink2)}.vsl a:hover{color:var(--ink)}
