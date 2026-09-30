@@ -6,8 +6,10 @@
 //                     errors {"error"}: 400 bad input, 402 expired/refunded, 429 too many requests, 502 EUrouter
 //   POST /api/notify  App Store Server Notifications V2 (production and sandbox send to the same URL)
 //
-// No database: the key is named after the subscription, so EUrouter's key list is the record of who has one.
-// One secret, EUROUTER_MANAGEMENT_KEY (a Pages secret, never in this public folder).
+// The key is named after the subscription, so EUrouter's key list is the record of who has one and what it spent.
+// One secret, EUROUTER_MANAGEMENT_KEY (a Pages secret, never in this public folder). One KV namespace, MINT, holds
+// two small things EUrouter cannot: refunded subscriptions (so an old JWS cannot mint again) and a 60 s marker per
+// subscription (so repeated requests are refused before any EUrouter call).
 
 /// Credits a month per product (≈ €4, decision of 2026-09-30). Anything not listed is refused. Sandbox purchases
 /// (TestFlight, App Review) cost nothing but spend real credits, so they get 1.00.
@@ -30,6 +32,7 @@ export const APP_APPLE_ID = undefined
 
 const EUROUTER = "https://api.eurouter.ai/api/v1"
 const MIN_KEY_AGE_MS = 60_000
+const REVOKED_TTL_S = 400 * 86_400   // longer than a yearly subscription
 const INVALID_ENVIRONMENT = 4 // VerificationStatus.INVALID_ENVIRONMENT in the library
 const REVOKING = ["EXPIRED", "REFUND", "REVOKE", "GRACE_PERIOD_EXPIRED"]
 
@@ -67,7 +70,9 @@ export async function makeVerifiers(roots = APPLE_ROOTS, appAppleId = APP_APPLE_
 }
 
 let defaultVerifiers
-export const onRequest = ({ request, env }) => handle(request, env, (defaultVerifiers ||= makeVerifiers()))
+// A failed load is not cached for the isolate's life: the next request tries again.
+export const onRequest = ({ request, env }) =>
+  handle(request, env, (defaultVerifiers ||= makeVerifiers().catch((error) => { defaultVerifiers = undefined; throw error })))
 
 export async function handle(request, env, verifiersPromise) {
   if (request.method !== "POST") return json({ error: "POST only" }, 405)
@@ -103,11 +108,23 @@ async function mint(body, env, verifiers) {
   if (!cap) return json({ error: "not a Seduta Plus subscription" }, 400)
   if (transaction.revocationDate) return json({ error: "this subscription was refunded" }, 402)
   if (!transaction.expiresDate || transaction.expiresDate < Date.now()) return json({ error: "this subscription has expired" }, 402)
+  // Family Sharing would give every member their own originalTransactionId, and so their own cap. It stays off in
+  // App Store Connect; this refuses it should it ever be switched on.
+  if (transaction.inAppOwnershipType !== "PURCHASED") return json({ error: "shared subscriptions are not supported" }, 402)
 
   const name = keyName(transaction)
+  const kv = store(env)
+  // A refund deletes the key, but the JWS from before the refund still verifies and has not expired. Anything bought
+  // before the refund is refused; a new subscription after it has a later purchase date and goes through.
+  const revokedAt = Number(await kv.get(`revoked:${name}`))
+  if (revokedAt && !(transaction.purchaseDate > revokedAt)) return json({ error: "this subscription was refunded" }, 402)
+  if (await kv.get(`recent:${name}`)) return json({ error: "a key was requested less than a minute ago" }, 429)
+  await kv.put(`recent:${name}`, "1", { expirationTtl: 60 })   // 60 s is KV's shortest expiry
+
   const now = Date.now()
   const existing = await find(name, env)
-  if (existing.some((key) => now - Date.parse(key.created_at) < MIN_KEY_AGE_MS)) {
+  // A missing or unreadable created_at counts as just now: refuse rather than guess.
+  if (existing.some((key) => !(now - Date.parse(key.created_at) >= MIN_KEY_AGE_MS))) {
     return json({ error: "a key was issued less than a minute ago" }, 429)
   }
 
@@ -149,7 +166,12 @@ async function notify(body, env, verifiers) {
   const transaction = await verify(verifiers, (v) => v.verifyAndDecodeTransaction(signed))
   if (!transaction) return json({ error: "the transaction could not be verified" }, 400)
 
-  const existing = await find(keyName(transaction), env)
+  const name = keyName(transaction)
+  if (type === "REFUND" || type === "REVOKE") {
+    const at = transaction.revocationDate || payload.signedDate || Date.now()
+    await store(env).put(`revoked:${name}`, String(at), { expirationTtl: REVOKED_TTL_S })
+  }
+  const existing = await find(name, env)
   for (const key of existing) await remove(key.hash, env)
   return json({ ok: true, revoked: existing.length })
 }
@@ -183,9 +205,10 @@ export function spentThisMonth(keys, cap, now) {
   let used = 0
   for (const key of keys) {
     used += Number(key.usage_monthly) || 0
-    if (Date.parse(key.created_at) >= month && typeof key.limit === "number") carried = Math.max(carried, cap - key.limit)
+    const created = Date.parse(key.created_at)
+    if (!(created < month) && typeof key.limit === "number") carried = Math.max(carried, cap - key.limit)   // unreadable date: this month
   }
-  return carried + used
+  return Math.min(cap, Math.max(0, carried) + used)
 }
 
 function monthStart(now) {
@@ -196,16 +219,22 @@ function monthStart(now) {
 /// Every key with this name. EUrouter pages the list with `offset`; the page size is not documented.
 // ponytail: reads the whole list. Fine for hundreds of subscribers; ask EUrouter for a name filter past that.
 async function find(name, env) {
-  const found = []
+  const found = new Map()
+  const seen = new Set()
   for (let offset = 0, page = 0; page < 100; page++) {
     const response = await eurouter(`/keys?offset=${offset}`, env)
     if (!response.ok) throw new EUrouterError(`list said ${response.status}`)
     const { data } = await response.json()
-    if (!data?.length) break
-    found.push(...data.filter((key) => key.name === name))
+    // An empty page ends the list; so does a page with nothing new, in case the offset is ignored.
+    const fresh = (data || []).filter((key) => key?.hash && !seen.has(key.hash))
+    if (!fresh.length) break
+    for (const key of fresh) {
+      seen.add(key.hash)
+      if (key.name === name) found.set(key.hash, key)
+    }
     offset += data.length
   }
-  return found
+  return [...found.values()]
 }
 
 async function remove(hash, env) {
@@ -226,6 +255,11 @@ async function eurouter(path, env, options = {}) {
 }
 
 class EUrouterError extends Error {}
+
+function store(env) {
+  if (!env.MINT) throw new Error("the KV namespace MINT is not bound")   // fail closed: no key without the refund check
+  return env.MINT
+}
 
 const round = (credits) => Math.round(credits * 100) / 100
 

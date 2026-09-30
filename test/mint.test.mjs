@@ -10,8 +10,15 @@ const verifiers = await makeVerifiers([chain.root], 1234)
 const env = { EUROUTER_MANAGEMENT_KEY: "test" }
 const MINUTE = 60_000
 
+/// A fake KV namespace (expiry ignored).
+function kv() {
+  const m = new Map()
+  return { get: async (k) => m.get(k) ?? null, put: async (k, v) => void m.set(k, v), m }
+}
+
 /// A fake EUrouter: a key list, and a log of every call.
 function eurouter(keys = []) {
+  env.MINT = kv()
   const calls = []
   let n = 0
   globalThis.fetch = async (url, options = {}) => {
@@ -137,8 +144,10 @@ const tests = {
     assert.deepEqual(keys.map((k) => k.hash), ["aaa"])
   },
   async "EUrouter failing gives 502"() {
+    env.MINT = kv()
     globalThis.fetch = async () => new Response("{}", { status: 500 })
     assert.equal((await mint()).status, 502)
+    env.MINT = kv()
     globalThis.fetch = async () => { throw new Error("offline") }
     assert.equal((await mint()).status, 502)
   },
@@ -192,6 +201,51 @@ const tests = {
     await post("/api/notify", { signedPayload: notification(chain, "DID_RENEW", sign(chain, transaction())) })
     assert.deepEqual(calls, [])
   },
+  async "a refund blocks the old JWS, a later subscription goes through"() {
+    const { keys } = eurouter([key({ created_at: "2026-01-01T00:00:00Z" })])
+    const before = transaction()
+    const refund = notification(chain, "REFUND", sign(chain, transaction({ revocationDate: Date.now() })))
+    assert.equal((await post("/api/notify", { signedPayload: refund })).status, 200)
+    assert.equal(keys.length, 0)
+    const kept = env.MINT
+    eurouter(); env.MINT = kept
+    assert.equal((await post("/api/key", { jws: sign(chain, before) })).status, 402, "the pre-refund JWS mints nothing")
+    const later = transaction({ purchaseDate: Date.now() + MINUTE, expiresDate: Date.now() + 30 * 86_400_000 })
+    assert.equal((await post("/api/key", { jws: sign(chain, later) })).status, 200, "a new subscription after the refund works")
+  },
+  async "Family Sharing is refused before EUrouter"() {
+    const { calls } = eurouter()
+    assert.equal((await mint({ inAppOwnershipType: "FAMILY_SHARED" })).status, 402)
+    assert.deepEqual(calls, [])
+  },
+  async "a second request within a minute is refused before EUrouter"() {
+    eurouter()
+    assert.equal((await mint()).status, 200)
+    const { calls } = { calls: [] }
+    const before = globalThis.fetch
+    globalThis.fetch = async (...a) => { calls.push(a[0]); return before(...a) }
+    assert.equal((await mint()).status, 429)
+    assert.deepEqual(calls, [])
+  },
+  async "an EUrouter list that ignores the offset is read once, not a hundred times"() {
+    const keys = [key({ created_at: "2026-01-01T00:00:00Z", usage_monthly: 0.3 })]
+    const { calls } = eurouter(keys)
+    const inner = globalThis.fetch
+    globalThis.fetch = async (url, o = {}) =>
+      (o.method || "GET") === "GET" ? new Response(JSON.stringify({ data: keys })) : inner(url, o)
+    const out = await read(await mint())
+    assert.equal(out.status, 200)
+    assert.ok(Math.abs(out.limit - 4.4) < 1e-9, `limit ${out.limit}: usage counted once`)
+    void calls
+  },
+  async "without the KV namespace nothing is minted"() {
+    eurouter()
+    delete env.MINT
+    await assert.rejects(mint())
+  },
+  async "APP_APPLE_ID is set (production purchases need it)"() {
+    assert.ok(Number.isInteger(APP_APPLE_ID) && APP_APPLE_ID > 0, "set APP_APPLE_ID in functions/api/[[path]].js before deploying")
+  },
   "the inlined Apple root is the committed AppleRootCA-G3.cer"() {
     const file = readFileSync(new URL("../functions/api/AppleRootCA-G3.cer", import.meta.url)).toString("base64")
     assert.equal(APPLE_ROOTS[0], file)
@@ -208,5 +262,4 @@ for (const [name, test] of Object.entries(tests)) {
     console.log(`FAIL  ${name}\n      ${error.message}`)
   }
 }
-if (APP_APPLE_ID === undefined) console.log("WARN  APP_APPLE_ID is not set: production purchases are refused until it is")
 process.exit(failed ? 1 : 0)

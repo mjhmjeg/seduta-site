@@ -54,19 +54,25 @@ when the subscription ends. Summaries go from the app straight to EUrouter; EUro
 1. `APP_APPLE_ID` in the function: App Store Connect › Seduta › App Information › Apple ID (a number).
 2. In the EUrouter dashboard, a key of type `management`, then (from this folder):
    `npx wrangler pages secret put EUROUTER_MANAGEMENT_KEY --project-name seduta-site`
-3. Deploy (above).
-4. App Store Connect › Seduta › App Information › App Store Server Notifications: Version 2,
+3. The KV namespace for refunds and the 60 s marker: `npx wrangler kv namespace create MINT`, then put the id it
+   prints into the `[[kv_namespaces]]` block of wrangler.toml and commit it (an id is not a secret). Without the
+   binding every /api/key request fails closed.
+4. Deploy (above). `npm test` refuses while `APP_APPLE_ID` is unset.
+5. Smoke test against the real EUrouter before the build ships: one sandbox purchase from TestFlight, then check in
+   the EUrouter dashboard that exactly one key `seduta-sandbox-…` exists with limit 1.00.
+6. App Store Connect › Seduta › App Information › App Store Server Notifications: Version 2,
    `https://seduta.spert.ai/api/notify` for both Production and Sandbox.
 
 ### Test
 
 `npm test` checks the product table, the environment order, the Sandbox cap, the 60 s rule, the month carry-over and self-healing, the race, the
 notifications and the inlined root, with a made-up certificate chain (openssl) and a mocked EUrouter.
-To try it locally: `npx wrangler pages dev --binding EUROUTER_MANAGEMENT_KEY=dummy`, then
+To try it locally: `npx wrangler pages dev --binding EUROUTER_MANAGEMENT_KEY=dummy --kv MINT`, then
 `curl -X POST -d '{}' localhost:8788/api/key` answers 400.
 
 ### Worth knowing
 
+- No rate limit per IP: seduta.spert.ai's DNS is at Namecheap, so Cloudflare's rate-limiting rules are not available. Unverified requests cost only a signature check and never reach EUrouter; a verified subscriber is held to one request a minute by the KV marker.
 - The key list is read whole on every call. Fine for hundreds of subscribers; ask EUrouter for a name filter past that.
 - Refunds come late: credits already spent are gone. The monthly cap bounds that to one month per subscriber.
 - Sandbox keys spend real credits, hence the 1.00 cap.
