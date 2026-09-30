@@ -1,0 +1,6 @@
+# Cloudflare Pages project seduta-site. Run wrangler from this folder: it reads this file and ./functions.
+# With this file, it (not the dashboard) holds the project's settings; the secret EUROUTER_MANAGEMENT_KEY is kept.
+name = "seduta-site"
+pages_build_output_dir = "."
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]   # @apple/app-store-server-library is written for Node

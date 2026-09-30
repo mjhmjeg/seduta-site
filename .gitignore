@@ -1,0 +1,4 @@
+node_modules/
+.wrangler/
+# Never create .dev.vars here: this folder is the published site, and wrangler would upload it as a page.
+.dev.vars*
