@@ -1,0 +1,15 @@
+{
+  "name": "seduta-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev",
+    "test": "node test/mint.test.mjs"
+  },
+  "dependencies": {
+    "@apple/app-store-server-library": "^3.1.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.144.0"
+  }
+}
