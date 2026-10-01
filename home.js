@@ -128,7 +128,22 @@ function initTerm() {
 const TPL = $('#mac');
 const mk = () => TPL.content.firstElementChild.cloneNode(true);
 const BOX = 'M4.5 4.6 L19.4 4.5 L19.5 19.4 L4.6 19.5 Z', BOXT = BOX + ' M8 12.3 L11 15.4 L19.8 4.8';
-const CLK = ['14:29', '14:30', '14:31', '15:02', '15:03', '15:03', '15:04'];
+// The demo happens "now": the sample call starts at the current time (to the nearest 5 minutes), the recorded list
+// counts back from today. ponytail: no midnight handling; a call at 23:58 shows a clock past midnight on the same date.
+const p2 = (n) => String(n).padStart(2, '0'), MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const NOW = new Date(), T0 = new Date(Math.round(NOW.getTime() / 3e5) * 3e5);
+const at = (min, base = T0) => new Date(base.getTime() + min * 6e4), hm = (d) => p2(d.getHours()) + ':' + p2(d.getMinutes());
+const dmy = (d) => d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear(), ago = (n) => at(-n * 1440);
+const NEXT = new Date(Math.ceil(at(75).getTime() / 18e5) * 18e5);   // the following meeting: the next half hour, at least 75 min on
+const CLK = [-1, 0, 1, 32, 33, 33, 34].map((m) => hm(at(m)));
+const DAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][T0.getDay()] + ' ' + T0.getDate() + ' ' + MON[T0.getMonth()] + '  ';
+const DATES = {
+  up1: 'Today · ' + hm(T0), up2: (NEXT.getDate() === T0.getDate() ? 'Today' : 'Tomorrow') + ' · ' + hm(NEXT), pan2: hm(NEXT) + ' · Teams',
+  r0: dmy(T0) + ' at ' + hm(T0), r1: dmy(ago(1)) + ' at 10:00', r2: dmy(ago(2)) + ' at 15:00', r3: dmy(ago(3)) + ' at 14:00',
+  det: dmy(T0) + ' at ' + hm(T0) + ' · 32 min',
+  ld: NOW.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }), lt: hm(NOW),
+};
+[TPL.content, document].forEach((root) => $$('[data-d]', root).forEach((e) => { e.textContent = DATES[e.dataset.d]; }));
 const LABELS = ['Seduta at rest', 'A call starts', 'Recording', 'Menu bar', 'Notes ready', 'Transcript', 'Your summary'];
 const CAPS = ['Seduta sits quietly in your menu bar and knows your calendar.', 'It notices the call and asks. No bot joins. Go ahead, press Record: this is a demo, nothing gets recorded.', 'Recording both sides of the call. The red dot shows it, the whole time.', 'Everything is one click from the menu bar.', 'When the call ends, your Mac writes it down. On the device.', 'Every word, with who said it.', 'Change the template, edit it, tick things off. It’s your file.'];
 const SPEAKER = (step, sub) => step === 2 ? 's' : step === 3 ? ['s', 'j', 'a', 'm', 's'][Math.max(0, sub - 1)] : step === 4 ? 'm' : '';
@@ -140,7 +155,7 @@ function paint(root, s) {
   d.step = s.step; d.sub = s.sub; d.prog = s.prog ? 1 : 0; d.tpl = s.tpl; d.picker = s.picker ? 1 : 0; d.speak = SPEAKER(s.step, s.sub);
   const q = root._q || (root._q = { tpl: $$('.tpl-name', root), clk: $('.clk', root), tmr: $('.tmr', root), tips: $$('.tip', root), ai: $$('.ai, .aitr', root), pick: $('[data-act="picker"]', root) });
   q.tpl.forEach((e) => { e.textContent = s.tpl; });
-  q.clk.textContent = 'Wed 30 Sep  ' + CLK[s.step - 1];
+  q.clk.textContent = DAY + CLK[s.step - 1];
   q.tmr.textContent = fmt(s.secs);
   q.tips.forEach((t, i) => t.classList.toggle('on', i === s.tip));
   q.pick.setAttribute('aria-expanded', String(!!s.picker));
