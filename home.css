@@ -490,3 +490,18 @@ svg.h-row1{display:none!important}
 
 /* footer: comparison links (scripts/vs_pages.py) */
 .vsl{padding-bottom:40px;margin-top:-16px;display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px}.vsl a{color:var(--ink2)}.vsl a:hover{color:var(--ink)}
+
+/* hero headline: "Your meetings." / "Your device." swap, "Bots." struck through by hand, the dot pulses like the logo */
+.hero h1 .hl{display:block}.hero h1 .nw{white-space:nowrap}
+.hero h1 .hl-static{display:none}
+.swap{display:inline-grid;text-align:left;vertical-align:top}
+.swap>span{grid-area:1/1;animation:sedSwapA 7s ease-in-out infinite}
+.swap>span+span{animation-name:sedSwapB}
+@keyframes sedSwapA{0%,42%{opacity:1;transform:none}48%,94%{opacity:0;transform:translateY(-.18em)}100%{opacity:1;transform:none}}
+@keyframes sedSwapB{0%,42%{opacity:0;transform:translateY(.18em)}48%,94%{opacity:1;transform:none}100%{opacity:0;transform:translateY(.18em)}}
+.strike{position:relative;display:inline-block;color:var(--ink2)}
+.sk{position:absolute;left:-5%;top:36%;width:110%;height:.42em;overflow:visible;fill:none;stroke:var(--acc);stroke-width:5;stroke-linecap:round;vector-effect:non-scaling-stroke;clip-path:inset(-8px 100% -8px -8px);animation:sedStrike .7s .7s ease-out forwards}
+.sk path{vector-effect:non-scaling-stroke}
+@keyframes sedStrike{to{clip-path:inset(-8px -8px -8px -8px)}}
+.hdot{display:inline-block;width:.5em;height:.5em;margin-left:.16em;vertical-align:.02em}
+@media (prefers-reduced-motion:reduce){.hero h1 .hl-anim{display:none}.hero h1 .hl-static{display:block}.sk{animation:none;clip-path:none}}
