@@ -505,3 +505,12 @@ svg.h-row1{display:none!important}
 @keyframes sedStrike{to{clip-path:inset(-8px -8px -8px -8px)}}
 .hdot{display:inline-block;width:.5em;height:.5em;margin-left:.16em;vertical-align:.02em}
 @media (prefers-reduced-motion:reduce){.hero h1 .hl-anim{display:none}.hero h1 .hl-static{display:block}.sk{animation:none;clip-path:none}}
+
+/* under the hood: the on-device models, with credit */
+.tech{margin-top:112px}
+.tech .th{max-width:640px;display:flex;flex-direction:column;gap:12px}.tech .th p,.tech .tc p{font-size:17px;line-height:1.55;color:#C9C7C0}
+.tech .tc{margin-top:40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px}
+.tech h4{margin:0 0 8px;font-size:18px;font-weight:600;color:#fff;letter-spacing:-.01em}
+.tech a{color:#fff;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.4)}
+.tech .tf{margin-top:36px;font-size:15px;line-height:1.55;color:#9B9A97}
+@media (max-width:899px){.tech{margin-top:56px}.tech .tc{grid-template-columns:1fr;gap:24px;margin-top:24px}.tech .th p,.tech .tc p{font-size:16px}}
